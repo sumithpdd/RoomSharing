@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +37,23 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            Icon(
+              Icons.hotel,
+              size: 80,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top:20.0),
+              child: Text(
+                '🙏 Welcome 🙏  \n ${AppConstants.appName}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
         ),
       ),
     );
