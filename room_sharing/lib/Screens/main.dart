@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Screens/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +22,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(),
+      routes: {
+        LoginPage.routeName: (context) => LoginPage(),
+      },
     );
   }
 }
@@ -32,6 +38,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    Timer(Duration(seconds: 2), () {
+      Navigator.pushNamed(context, LoginPage.routeName);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -43,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
               size: 80,
             ),
             Padding(
-              padding: const EdgeInsets.only(top:20.0),
+              padding: const EdgeInsets.only(top: 20.0),
               child: Text(
                 '🙏 Welcome 🙏  \n ${AppConstants.appName}',
                 style: TextStyle(
