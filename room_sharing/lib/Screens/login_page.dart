@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 
+import 'signup_page.dart';
+
 class LoginPage extends StatefulWidget {
   static final String routeName = '/loginPageRoute';
 
@@ -13,6 +15,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  void _signup(){
+    Navigator.pushNamed(context, SignupPage.routeName);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: _signup ,
                   child: Text(
                     'Sign up',
                     style: TextStyle(

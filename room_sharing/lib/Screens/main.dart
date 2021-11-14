@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/login_page.dart';
+import 'package:room_sharing/Screens/signup_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       home: const MyHomePage(),
       routes: {
         LoginPage.routeName: (context) => LoginPage(),
+        SignupPage.routeName: (context) => SignupPage(),
       },
     );
   }
