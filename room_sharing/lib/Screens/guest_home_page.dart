@@ -20,7 +20,7 @@ class GuestHomePage extends StatefulWidget {
 }
 
 class _GuestHomePageState extends State<GuestHomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 4;
   final List<String> _pageTitles = [
     'Explore',
     'Saved',

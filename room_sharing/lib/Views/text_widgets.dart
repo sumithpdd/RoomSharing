@@ -11,7 +11,7 @@ class AppBarText extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Text(
       text,
-      style: TextStyle(color: Colors.white, fontSize: 20.0),
+      style: TextStyle(color: Colors.white, fontSize: 25.0),
     );
   }
 }
