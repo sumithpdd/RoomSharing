@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
 import 'package:room_sharing/Screens/login_page.dart';
+import 'package:room_sharing/Screens/personal_info_page.dart';
 import 'package:room_sharing/Screens/signup_page.dart';
+import 'package:room_sharing/Screens/view_profile_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +30,8 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (context) => LoginPage(),
         SignupPage.routeName: (context) => SignupPage(),
         GuestHomePage.routeName:(context) =>GuestHomePage(),
+        PersonalInfoPage.routeName:(context) =>PersonalInfoPage(),
+        ViewProfilePage.routeName:(context) =>ViewProfilePage(),
       },
     );
   }

@@ -3,6 +3,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Screens/login_page.dart';
+import 'package:room_sharing/Screens/personal_info_page.dart';
+import 'package:room_sharing/Screens/view_profile_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -15,6 +17,7 @@ class _AccountPageState extends State<AccountPage> {
   void _logout(){
     Navigator.pushNamed(context, LoginPage.routeName);
   }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,7 +32,9 @@ class _AccountPageState extends State<AccountPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, ViewProfilePage.routeName);
+                  },
                   child: CircleAvatar(
                     backgroundColor: Colors.black,
                     radius: MediaQuery.of(context).size.width / 9.5,
@@ -64,8 +69,10 @@ class _AccountPageState extends State<AccountPage> {
             children: [
               MaterialButton(
                 height: MediaQuery.of(context).size.height /9.0,
-                onPressed: () {},
-                child: AccountPAgeListViewItem(
+                onPressed: () {
+                  Navigator.pushNamed(context, PersonalInfoPage.routeName);
+                },
+                child: AccountPageListViewItem(
                   text: 'Personal Information',
                   iconData: Icons.person,
                 ),
@@ -73,7 +80,7 @@ class _AccountPageState extends State<AccountPage> {
               MaterialButton(
                 height: MediaQuery.of(context).size.height /9.0,
                 onPressed: () {},
-                child: AccountPAgeListViewItem(
+                child: AccountPageListViewItem(
                   text: 'Become a Host',
                   iconData: Icons.hotel,
                 ),
@@ -81,7 +88,7 @@ class _AccountPageState extends State<AccountPage> {
               MaterialButton(
                 height: MediaQuery.of(context).size.height /9.0,
                 onPressed: _logout,
-                child: AccountPAgeListViewItem(
+                child: AccountPageListViewItem(
                   text: 'Logout',
                   iconData: Icons.logout,
                 ),
@@ -95,11 +102,11 @@ class _AccountPageState extends State<AccountPage> {
   }
 }
 
-class AccountPAgeListViewItem extends StatelessWidget {
+class AccountPageListViewItem extends StatelessWidget {
   final String text;
   final IconData iconData;
 
-  const AccountPAgeListViewItem(
+  const AccountPageListViewItem(
       {Key? key, required this.text, required this.iconData})
       : super(key: key);
 
