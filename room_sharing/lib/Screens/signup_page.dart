@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_declarations
 
 import 'package:flutter/material.dart';
-import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Screens/guest_home_page.dart';
+import 'package:room_sharing/Views/text_widgets.dart';
 
 class SignupPage extends StatefulWidget {
   static final String routeName = '/SignupPageRoute';
@@ -13,14 +14,16 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+
+  void _signup(){
+    Navigator.pushNamed(context, GuestHomePage.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Signup Page',
-          style: TextStyle(color: Colors.white, fontSize: 20.0),
-        ),
+        title: AppBarText(text: 'Signup Page'),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -74,9 +77,9 @@ class _SignupPageState extends State<SignupPage> {
                   ]),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 40.0,bottom:40.0 ),
+                  padding: const EdgeInsets.only(top: 40.0, bottom: 40.0),
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: _signup,
                     child: Text(
                       'Submit',
                       style: TextStyle(

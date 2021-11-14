@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Screens/guest_home_page.dart';
 
 import 'signup_page.dart';
 
 class LoginPage extends StatefulWidget {
-  static final String routeName = '/loginPageRoute';
+  static const String routeName = '/loginPageRoute';
 
   const LoginPage({Key? key}) : super(key: key);
 
@@ -15,8 +16,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   void _signup(){
     Navigator.pushNamed(context, SignupPage.routeName);
+  }
+  void _login(){
+    Navigator.pushNamed(context, GuestHomePage.routeName);
   }
   @override
   Widget build(BuildContext context) {
@@ -52,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: _login,
                   child: Text(
                     'Login',
                     style: TextStyle(
