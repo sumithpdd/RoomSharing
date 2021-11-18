@@ -1,7 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:room_sharing/Models/app_constants.dart';
+
+import 'rating_widget.dart';
 
 class ReviewListTile extends StatefulWidget {
   const ReviewListTile({Key? key}) : super(key: key);
@@ -11,7 +13,7 @@ class ReviewListTile extends StatefulWidget {
 }
 
 class _ReviewListTileState extends State<ReviewListTile> {
-  late double _rating;
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,35 +32,7 @@ class _ReviewListTileState extends State<ReviewListTile> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
-            RatingBar(
-              initialRating: 3,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemSize: 20.0,
-              ignoreGestures: true,
-              glowColor: AppConstants.selectedIconColor,
-              unratedColor: AppConstants.nonSelectedGreyIconColor,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-              onRatingUpdate: (rating) {
-                setState(() {
-                  _rating = rating;
-                });
-              },
-              ratingWidget: RatingWidget(
-                full: const Icon(
-                  Icons.star,
-                  color: AppConstants.selectedIconColor,size: 5,
-                ),
-                half: const Icon(
-                  Icons.star,
-                  color: AppConstants.selectedIconColor,size: 5,
-                ),
-                empty: const Icon(
-                  Icons.star,
-                  color: AppConstants.nonSelectedGreyIconColor,size: 5,
-                ),
-              ),
-            )
+            StarRating(editable: false,initialRating: 2.5,ratingSize: RatingSize.medium),
           ],
         ),
         const Padding(

@@ -1,8 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Views/rating_widget.dart';
 
 class ReviewForm extends StatefulWidget {
   const ReviewForm({Key? key}) : super(key: key);
@@ -34,37 +33,7 @@ class _ReviewFormState extends State<ReviewForm> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
-                  child: RatingBar(
-                    initialRating: 3,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 30.0,
-                    glowColor: AppConstants.selectedIconColor,
-                    unratedColor: AppConstants.nonSelectedGreyIconColor,
-                    itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    onRatingUpdate: (rating) {
-                      setState(() {
-                        // _rating = rating;
-                      });
-                    },
-                    ratingWidget: RatingWidget(
-                      full: const Icon(
-                        Icons.star,
-                        color: AppConstants.selectedIconColor,
-                        size: 5,
-                      ),
-                      half: const Icon(
-                        Icons.star,
-                        color: AppConstants.selectedIconColor,
-                        size: 5,
-                      ),
-                      empty: const Icon(
-                        Icons.star,
-                        color: AppConstants.nonSelectedGreyIconColor,
-                        size: 5,
-                      ),
-                    ),
-                  ),
+                  child: StarRating(editable:true,initialRating: 2.5,ratingSize: RatingSize.large,),
                 ),
               ],
             ),
