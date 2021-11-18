@@ -5,6 +5,6 @@ class AppConstants{
 
   static const Color selectedIconColor =Colors.deepOrange;
   static const Color nonSelectedIconColor =Colors.black;
-
+  static const Color nonSelectedGreyIconColor =Colors.grey;
 
 }

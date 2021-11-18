@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_declarations
+// ignore_for_file: prefer_const_constructors, prefer_const_declarations, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
