@@ -19,7 +19,9 @@ class _ExplorePageState extends State<ExplorePage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
+              padding: const EdgeInsets.only(
+                  top: 10,
+                  bottom: 50.0,),
               child: TextField(
                 decoration: InputDecoration(
                     hintText: 'Search',
@@ -35,8 +37,9 @@ class _ExplorePageState extends State<ExplorePage> {
               ),
             ),
             GridView.builder(
+              physics: ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 3,
+              itemCount: 5,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
