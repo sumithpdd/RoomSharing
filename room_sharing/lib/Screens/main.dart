@@ -8,6 +8,7 @@ import 'package:room_sharing/Screens/guest_home_page.dart';
 import 'package:room_sharing/Screens/login_page.dart';
 import 'package:room_sharing/Screens/personal_info_page.dart';
 import 'package:room_sharing/Screens/signup_page.dart';
+import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
 
 void main() {
@@ -30,9 +31,10 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.routeName: (context) => LoginPage(),
         SignupPage.routeName: (context) => SignupPage(),
-        GuestHomePage.routeName:(context) =>GuestHomePage(),
-        PersonalInfoPage.routeName:(context) =>PersonalInfoPage(),
-        ViewProfilePage.routeName:(context) =>ViewProfilePage(),
+        GuestHomePage.routeName: (context) => GuestHomePage(),
+        PersonalInfoPage.routeName: (context) => PersonalInfoPage(),
+        ViewProfilePage.routeName: (context) => ViewProfilePage(),
+        ViewPostingPage.routeName: (context) => ViewPostingPage(),
       },
     );
   }

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
 
 class ExplorePage extends StatefulWidget {
@@ -20,8 +21,9 @@ class _ExplorePageState extends State<ExplorePage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                  top: 10,
-                  bottom: 50.0,),
+                top: 10,
+                bottom: 50.0,
+              ),
               child: TextField(
                 decoration: InputDecoration(
                     hintText: 'Search',
@@ -44,10 +46,16 @@ class _ExplorePageState extends State<ExplorePage> {
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
-                childAspectRatio:3/4,
+                childAspectRatio: 3 / 4,
               ),
               itemBuilder: (context, index) {
-                return PostingGridTile();
+                return InkResponse(
+                  enableFeedback: true,
+                  onTap: () {
+                    Navigator.pushNamed(context, ViewPostingPage.routeName);
+                  },
+                  child: PostingGridTile(),
+                );
               },
             )
           ],

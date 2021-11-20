@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
 
 class SavedPage extends StatefulWidget {
@@ -28,15 +29,21 @@ class _SavedPageState extends State<SavedPage> {
         itemBuilder: (context, index) {
           return Stack(
             children: [
-              PostingGridTile(),
+              InkResponse(
+                enableFeedback: true,
+                onTap: () {
+                  Navigator.pushNamed(context, ViewPostingPage.routeName);
+                },
+                child: PostingGridTile(),
+              ),
               Align(
                 alignment: Alignment.topRight,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: Container(
                     width: 30.0,
-                    decoration:
-                        BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white),
                     child: IconButton(
                         padding: EdgeInsets.all(0.0),
                         onPressed: () {},
