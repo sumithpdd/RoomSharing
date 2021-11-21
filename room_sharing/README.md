@@ -17,3 +17,14 @@ https://pub.dev/packages/auto_size_text
   
   https://pub.dev/packages/google_maps_flutter
  
+
+- Pages guest pages:
+   -- Start pages (welcome screen, login, sign up pages)
+   -- Profile pages (personal profile, edit profile, view profile)
+   -- Trips pages (explore page, saved, upcoming/previous trips, view a trip, 
+      booking Conversation pages (inbox and conversation page)
+  
+- the host pages:
+  -- Trips pages (my postings and edit posting)
+  -- Conversation pages (inbox and conversation page)
+  -- Bookings page 
