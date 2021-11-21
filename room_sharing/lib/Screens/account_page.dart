@@ -2,6 +2,9 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Screens/guest_home_page.dart';
+import 'package:room_sharing/Screens/host_home_page.dart';
 import 'package:room_sharing/Screens/login_page.dart';
 import 'package:room_sharing/Screens/personal_info_page.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
@@ -14,8 +17,26 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  void _logout(){
+  String _hostingTile = 'Host Dashboard';
+
+  void _logout() {
     Navigator.pushNamed(context, LoginPage.routeName);
+  }
+
+  @override
+  void initState() {
+    if (!AppConstants.isHosting) {
+      _hostingTile = "Guest Dashboard";
+    }
+    super.initState();
+  }
+
+  void _changeHosting() {
+    String routeName = AppConstants.isHosting
+        ? GuestHomePage.routeName
+        : HostHomePage.routeName;
+    AppConstants.isHosting = true;
+    Navigator.pushNamed(context, routeName);
   }
 
   @override
@@ -39,7 +60,8 @@ class _AccountPageState extends State<AccountPage> {
                     backgroundColor: Colors.black,
                     radius: MediaQuery.of(context).size.width / 9.5,
                     child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/images/sumith2020.jpg'),
+                      backgroundImage:
+                          AssetImage('assets/images/sumith2020.jpg'),
                       radius: MediaQuery.of(context).size.width / 10,
                     ),
                   ),
@@ -51,8 +73,8 @@ class _AccountPageState extends State<AccountPage> {
                     children: [
                       AutoSizeText(
                         'Sumith Damodaran',
-                        style:
-                            TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       AutoSizeText(
                         's@s.com',
@@ -68,7 +90,7 @@ class _AccountPageState extends State<AccountPage> {
             shrinkWrap: true,
             children: [
               MaterialButton(
-                height: MediaQuery.of(context).size.height /9.0,
+                height: MediaQuery.of(context).size.height / 9.0,
                 onPressed: () {
                   Navigator.pushNamed(context, PersonalInfoPage.routeName);
                 },
@@ -78,22 +100,21 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ),
               MaterialButton(
-                height: MediaQuery.of(context).size.height /9.0,
-                onPressed: () {},
+                height: MediaQuery.of(context).size.height / 9.0,
+                onPressed: _changeHosting,
                 child: AccountPageListViewItem(
-                  text: 'Become a Host',
+                  text: _hostingTile,
                   iconData: Icons.hotel,
                 ),
               ),
               MaterialButton(
-                height: MediaQuery.of(context).size.height /9.0,
+                height: MediaQuery.of(context).size.height / 9.0,
                 onPressed: _logout,
                 child: AccountPageListViewItem(
                   text: 'Logout',
                   iconData: Icons.logout,
                 ),
               ),
-
             ],
           )
         ],
@@ -116,7 +137,7 @@ class AccountPageListViewItem extends StatelessWidget {
       contentPadding: EdgeInsets.all(0.0),
       leading: Text(
         text,
-        style: TextStyle(fontSize: 25.0,fontWeight: FontWeight.normal),
+        style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.normal),
       ),
       trailing: Icon(
         iconData,

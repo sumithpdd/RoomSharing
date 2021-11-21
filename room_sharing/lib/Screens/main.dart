@@ -7,6 +7,7 @@ import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/book_posting_page.dart';
 import 'package:room_sharing/Screens/conversation_page.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
+import 'package:room_sharing/Screens/host_home_page.dart';
 import 'package:room_sharing/Screens/login_page.dart';
 import 'package:room_sharing/Screens/personal_info_page.dart';
 import 'package:room_sharing/Screens/signup_page.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         ViewPostingPage.routeName: (context) => ViewPostingPage(),
         BookPostingPage.routeName: (context) => BookPostingPage(),
         ConversationPage.routeName: (context) => ConversationPage(),
+        HostHomePage.routeName: (context) => HostHomePage(),
       },
     );
   }
