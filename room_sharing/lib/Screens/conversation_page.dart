@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_declarations
+// ignore_for_file: prefer_const_constructors, prefer_const_declarations, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
@@ -15,9 +15,7 @@ class ConversationPage extends StatefulWidget {
 }
 
 class _ConversationPageState extends State<ConversationPage> {
-  void _signup() {
-    Navigator.pushNamed(context, GuestHomePage.routeName);
-  }
+
 
   @override
   Widget build(BuildContext context) {
