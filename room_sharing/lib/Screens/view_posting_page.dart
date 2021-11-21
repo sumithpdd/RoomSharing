@@ -6,8 +6,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:room_sharing/Screens/book_posting_page.dart';
 
-import 'package:room_sharing/Screens/guest_home_page.dart';
+import 'package:room_sharing/Screens/view_profile_page.dart';
 import 'package:room_sharing/Views/form_widgets.dart';
 import 'package:room_sharing/Views/list_widgets.dart';
 import 'package:room_sharing/Views/text_widgets.dart';
@@ -101,7 +102,11 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                         Column(
                           children: [
                             MaterialButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, BookPostingPage.routeName);
+
+
+                                },
                                 color: Colors.redAccent,
                                 child: Text(
                                   'Book Now',
@@ -141,11 +146,16 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                                 radius:
                                     MediaQuery.of(context).size.width / 12.5,
                                 backgroundColor: Colors.black,
-                                child: CircleAvatar(
-                                  backgroundImage: AssetImage(
-                                      'assets/images/sumith2020.jpg'),
-                                  radius:
-                                      MediaQuery.of(context).size.width / 13,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushNamed(context, ViewProfilePage.routeName);
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                        'assets/images/sumith2020.jpg'),
+                                    radius:
+                                        MediaQuery.of(context).size.width / 13,
+                                  ),
                                 ),
                               ),
                               Padding(
