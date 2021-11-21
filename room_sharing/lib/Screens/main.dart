@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/book_posting_page.dart';
+import 'package:room_sharing/Screens/conversation_page.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
 import 'package:room_sharing/Screens/login_page.dart';
 import 'package:room_sharing/Screens/personal_info_page.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         ViewProfilePage.routeName: (context) => ViewProfilePage(),
         ViewPostingPage.routeName: (context) => ViewPostingPage(),
         BookPostingPage.routeName: (context) => BookPostingPage(),
+        ConversationPage.routeName: (context) => ConversationPage(),
       },
     );
   }

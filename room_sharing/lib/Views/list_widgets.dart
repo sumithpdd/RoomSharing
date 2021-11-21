@@ -2,6 +2,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Screens/view_profile_page.dart';
 
 import 'rating_widget.dart';
 
@@ -13,8 +14,6 @@ class ReviewListTile extends StatefulWidget {
 }
 
 class _ReviewListTileState extends State<ReviewListTile> {
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -22,7 +21,7 @@ class _ReviewListTileState extends State<ReviewListTile> {
         Row(
           children: [
             CircleAvatar(
-              backgroundImage: const  AssetImage('assets/images/sumith2020.jpg'),
+              backgroundImage: const AssetImage('assets/images/sumith2020.jpg'),
               radius: MediaQuery.of(context).size.width / 15,
             ),
             const Padding(
@@ -32,16 +31,164 @@ class _ReviewListTileState extends State<ReviewListTile> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
-            StarRating(editable: false,initialRating: 2.5,ratingSize: RatingSize.medium),
+            StarRating(
+                editable: false,
+                initialRating: 2.5,
+                ratingSize: RatingSize.medium),
           ],
         ),
         const Padding(
-          padding: EdgeInsets.only(top:10.0,bottom:15),
+          padding: EdgeInsets.only(top: 10.0, bottom: 15),
           child: AutoSizeText(
-              'Great stay!, very helpful. Would definitely recommend the soup',
-            style: TextStyle( fontSize: 18),),
+            'Great stay!, very helpful. Would definitely recommend the soup',
+            style: TextStyle(fontSize: 18),
+          ),
         )
       ],
     );
+  }
+}
+
+class ConversationListTile extends StatefulWidget {
+  const ConversationListTile({Key? key}) : super(key: key);
+
+  @override
+  _ConversationListTileState createState() => _ConversationListTileState();
+}
+
+class _ConversationListTileState extends State<ConversationListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pushNamed(context, ViewProfilePage.routeName);
+        },
+        child: CircleAvatar(
+          backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
+          radius: MediaQuery.of(context).size.width / 14.0,
+        ),
+      ),
+      title: Text(
+        'Sammy Boy',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.5),
+      ),
+      subtitle: Text(
+        'Is it Available?',
+        style: TextStyle(fontSize: 20),
+      ),
+      trailing: Text(
+        'Dec 30',
+        style: TextStyle(fontSize: 15),
+      ),
+      contentPadding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+    );
+  }
+}
+
+class MessageListTile extends StatelessWidget {
+  const MessageListTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(35, 15, 15, 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Container(
+                padding: EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        'this is a long long message and this will be over flowing into multiple lines',
+                        textWidthBasis: TextWidthBasis.parent,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomRight,
+                        child: Text(
+                          'December 1',
+                          style: TextStyle(fontSize: 15.0),
+                        ))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, ViewProfilePage.routeName);
+            },
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
+              radius: MediaQuery.of(context).size.width / 20,
+            ),
+          ),],
+      ),
+    );
+
+    // return Padding(
+    //   padding: const EdgeInsets.fromLTRB(15, 15, 35, 15.0),
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.start,
+    //     crossAxisAlignment: CrossAxisAlignment.end,
+    //     children: [
+    //       GestureDetector(
+    //         onTap: () {
+    //           Navigator.pushNamed(context, ViewProfilePage.routeName);
+    //         },
+    //         child: CircleAvatar(
+    //           backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
+    //           radius: MediaQuery.of(context).size.width / 20,
+    //         ),
+    //       ),
+    //       Flexible(
+    //         child: Padding(
+    //           padding: const EdgeInsets.only(left: 10.0),
+    //           child: Container(
+    //             padding: EdgeInsets.all(15.0),
+    //             decoration: BoxDecoration(
+    //                 color: Colors.yellow,
+    //                 borderRadius: BorderRadius.circular(10)),
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.max,
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(bottom: 10.0),
+    //                   child: Text(
+    //                     'this is a long long message and this will be over flowing into multiple lines',
+    //                     textWidthBasis: TextWidthBasis.parent,
+    //                     style: TextStyle(fontSize: 20.0),
+    //                   ),
+    //                 ),
+    //                 Align(
+    //                     alignment: Alignment.bottomRight,
+    //                     child: Text(
+    //                       'December 1',
+    //                       style: TextStyle(fontSize: 15.0),
+    //                     ))
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
   }
 }
