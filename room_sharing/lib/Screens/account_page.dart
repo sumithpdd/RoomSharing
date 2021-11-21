@@ -25,8 +25,11 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    if (!AppConstants.isHosting) {
+    if (AppConstants.isHosting) {
       _hostingTile = "Guest Dashboard";
+    }
+    else{
+      _hostingTile = "Host Dashboard";
     }
     super.initState();
   }
@@ -35,7 +38,7 @@ class _AccountPageState extends State<AccountPage> {
     String routeName = AppConstants.isHosting
         ? GuestHomePage.routeName
         : HostHomePage.routeName;
-    AppConstants.isHosting = true;
+    AppConstants.isHosting = !AppConstants.isHosting;
     Navigator.pushNamed(context, routeName);
   }
 

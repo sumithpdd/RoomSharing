@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -97,7 +97,6 @@ class MessageListTile extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-
           Flexible(
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
@@ -137,7 +136,8 @@ class MessageListTile extends StatelessWidget {
               backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
               radius: MediaQuery.of(context).size.width / 20,
             ),
-          ),],
+          ),
+        ],
       ),
     );
 
@@ -190,5 +190,64 @@ class MessageListTile extends StatelessWidget {
     //     ],
     //   ),
     // );
+  }
+}
+
+class MyPostingListTile extends StatefulWidget {
+  const MyPostingListTile({Key? key}) : super(key: key);
+
+  @override
+  _MyPostingListTileState createState() => _MyPostingListTileState();
+}
+
+class _MyPostingListTileState extends State<MyPostingListTile> {
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.all(15.0),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: AutoSizeText(
+          'Awesome Apartment',
+          maxLines: 2,
+          minFontSize: 20,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      trailing: AspectRatio(
+        aspectRatio: 3 / 2,
+        child: Image(
+          image: AssetImage('assets/images/apartment.jpg'),
+          fit: BoxFit.fitWidth,
+        ),
+      ),
+    );
+  }
+}
+
+class CreatePostingListTile extends StatelessWidget {
+  const CreatePostingListTile({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 12,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 15.0),
+            child: Icon(Icons.add),
+          ),
+          Text(
+            'Create a posting',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

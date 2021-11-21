@@ -4,11 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/account_page.dart';
 import 'package:room_sharing/Screens/bookings_page.dart';
-import 'package:room_sharing/Screens/explore_page.dart';
 import 'package:room_sharing/Screens/inbox_page.dart';
 import 'package:room_sharing/Screens/my_postings_page.dart';
-import 'package:room_sharing/Screens/saved_page.dart';
-import 'package:room_sharing/Screens/trips_page.dart';
 import 'package:room_sharing/Views/text_widgets.dart';
 
 class HostHomePage extends StatefulWidget {
