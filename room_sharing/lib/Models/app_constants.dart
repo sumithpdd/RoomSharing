@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'user_model.dart';
+
 class AppConstants {
   static const String appName = "me casa tu casa";
 
@@ -7,6 +9,8 @@ class AppConstants {
   static const Color nonSelectedIconColor = Colors.black;
   static const Color nonSelectedGreyIconColor = Colors.grey;
   static bool isHosting =false;
+
+  static User currentUser= User();
   static final Map<int, String> monthDict = {
     1: "January",
     2: "February",
