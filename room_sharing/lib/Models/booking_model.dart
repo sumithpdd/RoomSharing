@@ -2,9 +2,11 @@ import 'contact_model.dart';
 import 'posting_model.dart';
 
 class Booking {
-  late Posting posting;
-  late Contact contact;
-  late List<DateTime> dates;
+   final Posting posting;
+   final Contact contact;
+   final List<DateTime> dates;
+
+  Booking({required this.posting,required this.contact, required this.dates});
 
   void createBooking(Posting posting, Contact contact, List<DateTime> dates) {
     posting = posting;

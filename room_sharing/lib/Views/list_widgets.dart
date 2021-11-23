@@ -2,18 +2,28 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
 
 import 'rating_widget.dart';
 
 class ReviewListTile extends StatefulWidget {
-  const ReviewListTile({Key? key}) : super(key: key);
+  final Review review;
+  const ReviewListTile({Key? key, required this.review}) : super(key: key);
+
 
   @override
   _ReviewListTileState createState() => _ReviewListTileState();
 }
 
 class _ReviewListTileState extends State<ReviewListTile> {
+  late Review _review;
+  @override
+  void initState() {
+    _review = widget.review;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,26 +31,26 @@ class _ReviewListTileState extends State<ReviewListTile> {
         Row(
           children: [
             CircleAvatar(
-              backgroundImage: const AssetImage('assets/images/sumith2020.jpg'),
+              backgroundImage: _review.contact.displayImage,
               radius: MediaQuery.of(context).size.width / 15,
             ),
-            const Padding(
+              Padding(
               padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: AutoSizeText(
-                'Sumith',
+                _review.contact.firstName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
             StarRating(
                 editable: false,
-                initialRating: 2.5,
+                initialRating: _review.rating,
                 ratingSize: RatingSize.medium),
           ],
         ),
-        const Padding(
+          Padding(
           padding: EdgeInsets.only(top: 10.0, bottom: 15),
           child: AutoSizeText(
-            'Great stay!, very helpful. Would definitely recommend the soup',
+            _review.text,
             style: TextStyle(fontSize: 18),
           ),
         )

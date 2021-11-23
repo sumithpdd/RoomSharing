@@ -34,9 +34,11 @@ class DummyData {
     users.add(user1);
     users.add(user2);
 
-    Review review = Review();
-    review.createReview(user2.createContactFromUser(),
-        "Amazing host, BFF for life", 4.5, DateTime.now());
+    Review review = Review(
+        contact: user2.createContactFromUser(),
+        text: "Amazing host, BFF for life",
+        rating: 4.5,
+        dateTime: DateTime.now());
 
     user1.reviews.add(review);
 
@@ -72,7 +74,7 @@ class DummyData {
         country: 'United Kingdom',
         host: user1.createContactFromUser());
     posting1.setImages([
-      'assets/images/apartment1.jpg',
+      'assets/images/apartment.jpg',
       'assets/images/interior1.jpg',
     ]);
     posting1.amenities = ['washers', 'dryer', 'iron', 'coffee machine'];
@@ -92,45 +94,55 @@ class DummyData {
         city: 'London',
         country: 'United Kingdom',
         host: user2.createContactFromUser());
-    posting1.setImages([
+    posting2.setImages([
       'assets/images/interior0.jpg',
       'assets/images/interior1.jpg',
     ]);
-    posting1.amenities = ['dishwasher', 'Cable', 'Wifi'];
-    posting1.beds = {
+    posting2.amenities = ['dishwasher', 'Cable', 'Wifi'];
+    posting2.beds = {
       'small': 1,
       'medium': 0,
       'large': 1,
     };
-    posting1.baths = {'full': 1, 'half': 1};
+    posting2.baths = {'full': 1, 'half': 1};
+
+    Review postingReview1 = Review(
+      contact: user2.createContactFromUser(),
+      text: 'Great view , Impressive decor',
+      rating: 4.5,
+      dateTime: DateTime(2021, 11, 11),
+    );
+    posting1.reviews.add(postingReview1);
+    Review postingReview2 = Review(
+      contact: user2.createContactFromUser(),
+      text: 'Decent place, not as big as I was expecting',
+      rating: 3.5,
+      dateTime: DateTime(2021, 11, 11),
+    );
+    posting2.reviews.add(postingReview2);
 
     postings.add(posting1);
     postings.add(posting2);
 
-    Booking booking1 = Booking();
-    booking1.createBooking(posting2, user1.createContactFromUser(), [
-      DateTime(2021, 11, 11),
-      DateTime(2021, 11, 12),
-      DateTime(2021, 11, 15)
-    ]);
+    Booking booking1 = Booking(
+        posting: posting2,
+        contact: user1.createContactFromUser(),
+        dates: [
+          DateTime(2021, 11, 11),
+          DateTime(2021, 11, 12),
+          DateTime(2021, 11, 15)
+        ]);
 
-    Booking booking2 = Booking();
-    booking2.createBooking(posting2, user1.createContactFromUser(), [
-      DateTime(2021, 11, 21),
-      DateTime(2021, 11, 22),
-      DateTime(2021, 11, 23)
-    ]);
+    Booking booking2 = Booking(
+        posting: posting2,
+        contact: user1.createContactFromUser(),
+        dates: [
+          DateTime(2021, 11, 21),
+          DateTime(2021, 11, 22),
+          DateTime(2021, 11, 23)
+        ]);
 
     posting2.bookings.add(booking1);
-
-    Review postingReview = Review();
-    postingReview.createReview(
-      user2.createContactFromUser(),
-      'Decent place, not as big as I was expecting',
-      3.5,
-      DateTime(2021, 11, 11),
-    );
-    posting1.reviews.add(postingReview);
 
     user1.bookings.add(booking1);
     user1.bookings.add(booking2);

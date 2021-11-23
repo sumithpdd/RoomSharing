@@ -5,8 +5,11 @@ import 'package:room_sharing/Models/app_constants.dart';
 
 class CalendarMonth extends StatefulWidget {
   final int monthIndex;
+  final List<DateTime>? unavailableDates;
 
-  const CalendarMonth({Key? key, required this.monthIndex}) : super(key: key);
+  const CalendarMonth(
+      {Key? key, required this.monthIndex, this.unavailableDates})
+      : super(key: key);
 
   @override
   _CalendarMonthState createState() => _CalendarMonthState();
@@ -24,7 +27,7 @@ class _CalendarMonthState extends State<CalendarMonth> {
       int daysInMonth = AppConstants.daysInMonths[_currentMonthInt]!;
       DateTime firstDayMonth = DateTime(_currentYearInt, _currentMonthInt, 1);
       int firstWeekdayOfMonth = firstDayMonth.weekday;
-      if(firstWeekdayOfMonth !=7){
+      if (firstWeekdayOfMonth != 7) {
         for (int i = 0; i < firstWeekdayOfMonth; i++) {
           _monthTiles.add(MonthTile(dateTime: null));
         }
@@ -63,12 +66,19 @@ class _CalendarMonthState extends State<CalendarMonth> {
               '${AppConstants.monthDict[_currentMonthInt]!} - $_currentYearInt'),
         ),
         GridView.builder(
-            itemCount: _monthTiles.length  ,
+            itemCount: _monthTiles.length,
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7, childAspectRatio: 1 / 1),
             itemBuilder: (context, index) {
               MonthTile monthTile = _monthTiles[index];
+              if (widget.unavailableDates!.contains(monthTile.dateTime)) {
+                return MaterialButton(
+                  onPressed: null,
+                  child: monthTile,
+                  disabledColor: Colors.redAccent,
+                );
+              }
               return MaterialButton(onPressed: () {}, child: monthTile);
             })
       ],

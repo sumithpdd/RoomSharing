@@ -2,6 +2,8 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Views/form_widgets.dart';
 import 'package:room_sharing/Views/list_widgets.dart';
 import 'package:room_sharing/Views/text_widgets.dart';
@@ -118,12 +120,17 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
                 child: ListView.builder(
-                  itemCount: 2,
+                  itemCount: AppConstants.currentUser.reviews.length,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
+                    Review currentReview =
+                        AppConstants.currentUser.reviews[index];
+
                     return Padding(
                       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                      child: ReviewListTile(),
+                      child: ReviewListTile(
+                        review: currentReview,
+                      ),
                     );
                   },
                 ),

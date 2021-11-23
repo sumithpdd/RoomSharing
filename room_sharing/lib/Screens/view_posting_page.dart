@@ -6,8 +6,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:room_sharing/Models/posting_model.dart';
+import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Screens/book_posting_page.dart';
-
 import 'package:room_sharing/Screens/view_profile_page.dart';
 import 'package:room_sharing/Views/form_widgets.dart';
 import 'package:room_sharing/Views/list_widgets.dart';
@@ -15,26 +16,30 @@ import 'package:room_sharing/Views/text_widgets.dart';
 
 class ViewPostingPage extends StatefulWidget {
   static final String routeName = '/ViewPostingPageRoute';
+  final Posting posting;
 
-  const ViewPostingPage({Key? key}) : super(key: key);
+  const ViewPostingPage({Key? key, required this.posting}) : super(key: key);
 
   @override
   _ViewPostingPageState createState() => _ViewPostingPageState();
 }
 
 class _ViewPostingPageState extends State<ViewPostingPage> {
-  final List<String> _amenities = [
-    'Hair dryer',
-    'Dishwasher',
-    'Iron',
-    'Wifi',
-    'GYM'
-  ];
+  late Posting _posting;
+
+  // final List<String> _amenities = [
+  //   'Hair dryer',
+  //   'Dishwasher',
+  //   'Iron',
+  //   'Wifi',
+  //   'GYM'
+  // ];
   final LatLng _aptLatLong = LatLng(51.5063836, -0.0745941);
   late Completer<GoogleMapController> _completer;
 
   @override
   void initState() {
+    _posting = widget.posting;
     _completer = Completer();
     super.initState();
   }
@@ -59,10 +64,11 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
               AspectRatio(
                 aspectRatio: 3 / 2,
                 child: PageView.builder(
-                    itemCount: 3,
+                    itemCount: _posting.displayImages.length,
                     itemBuilder: (context, index) {
+                      AssetImage currentImage = _posting.displayImages[index];
                       return Image(
-                        image: AssetImage('assets/images/apartment.jpg'),
+                        image: currentImage,
                         fit: BoxFit.fill,
                       );
                     }),
@@ -82,7 +88,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                             Container(
                               width: MediaQuery.of(context).size.width / 1.7,
                               child: AutoSizeText(
-                                "Apatment - Tower Bridge",
+                                _posting.name,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 30,
@@ -103,9 +109,14 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                           children: [
                             MaterialButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, BookPostingPage.routeName);
-
-
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => BookPostingPage(
+                                        posting: _posting,
+                                      ),
+                                    ),
+                                  );
                                 },
                                 color: Colors.redAccent,
                                 child: Text(
@@ -115,7 +126,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                                   ),
                                 )),
                             Text(
-                              "\$120 / night",
+                              "\$${_posting.price} / night",
                               style: TextStyle(fontSize: 15.0),
                             ),
                           ],
@@ -131,13 +142,13 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                           Container(
                             width: MediaQuery.of(context).size.width / 1.75,
                             child: AutoSizeText(
-                              "A quite and cozy place in the heart of the city. easy to get to wheresoever you want to go",
+                              _posting.description,
                               style: TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                               ),
                               maxLines: 5,
-                              minFontSize: 18.0,
-                              maxFontSize: 22.0,
+                              minFontSize: 15.0,
+                              maxFontSize: 20.0,
                             ),
                           ),
                           Column(
@@ -147,12 +158,12 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                                     MediaQuery.of(context).size.width / 12.5,
                                 backgroundColor: Colors.black,
                                 child: GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushNamed(context, ViewProfilePage.routeName);
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, ViewProfilePage.routeName);
                                   },
                                   child: CircleAvatar(
-                                    backgroundImage: AssetImage(
-                                        'assets/images/sumith2020.jpg'),
+                                    backgroundImage: _posting.host.displayImage,
                                     radius:
                                         MediaQuery.of(context).size.width / 13,
                                   ),
@@ -161,7 +172,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: Text(
-                                  'Sumith ',
+                                  _posting.host.firstName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               )
@@ -177,16 +188,16 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                         children: [
                           PostingInfoTile(
                               icondata: Icons.home,
-                              category: 'Apartment',
-                              categoryInfo: '2 guest'),
+                              category: _posting.type,
+                              categoryInfo: '${_posting.getNumGuests()} guest'),
                           PostingInfoTile(
                               icondata: Icons.hotel,
-                              category: '1 Bedroom',
-                              categoryInfo: 'i King'),
+                              category: 'Beds',
+                              categoryInfo: _posting.getBedroomText()),
                           PostingInfoTile(
                               icondata: Icons.wc,
-                              category: '2 Bath',
-                              categoryInfo: '1 shower room')
+                              category: 'Bath',
+                              categoryInfo: _posting.getBathroomText())
                         ],
                       ),
                     ),
@@ -201,9 +212,10 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                         shrinkWrap: true,
                         crossAxisCount: 2,
                         childAspectRatio: 4 / 1,
-                        children: List.generate(_amenities.length, (index) {
+                        children:
+                            List.generate(_posting.amenities.length, (index) {
                           return Text(
-                            _amenities[index],
+                            _posting.amenities[index],
                             style: TextStyle(
                               fontSize: 20.0,
                             ),
@@ -221,7 +233,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 25.0, bottom: 25.0),
                       child: Text(
-                        'St Katharine\'s Way, London E1W 1LD',
+                        _posting.getFullAddress(),
                         style: TextStyle(
                           fontSize: 25.0,
                         ),
@@ -263,13 +275,16 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: ListView.builder(
-                        itemCount: 2,
+                        itemCount: _posting.reviews.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
+                          Review currentReview = _posting.reviews[index];
                           return Padding(
                             padding:
                                 const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                            child: ReviewListTile(),
+                            child: ReviewListTile(
+                              review: currentReview,
+                            ),
                           );
                         },
                       ),

@@ -2,16 +2,27 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Views/rating_widget.dart';
 
 class PostingGridTile extends StatefulWidget {
-  const PostingGridTile({Key? key}) : super(key: key);
+  final Posting posting;
+
+  const PostingGridTile({Key? key, required this.posting}) : super(key: key);
 
   @override
   _PostingGridTileState createState() => _PostingGridTileState();
 }
 
 class _PostingGridTileState extends State<PostingGridTile> {
+  late Posting _posting;
+
+  @override
+  void initState() {
+    _posting = widget.posting;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,32 +34,35 @@ class _PostingGridTileState extends State<PostingGridTile> {
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('assets/images/apartment.jpg'),
+              image: _posting.displayImages.first,
               fit: BoxFit.fill,
             )),
           ),
         ),
         AutoSizeText(
-          'Apartment  - London tower bridge',
+          '${_posting.type}  - ${_posting.city} , ${_posting.country}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 17,
-          ),
-        ),
-        AutoSizeText(
-          'Best view, new decor',
-          style: TextStyle(
             fontSize: 16,
           ),
         ),
-        Text(
-          '\$120 / night',
+        AutoSizeText(
+          _posting.name,
           style: TextStyle(
             fontSize: 15,
           ),
         ),
+        Text(
+          '\$${_posting.price}  / night',
+          style: TextStyle(
+            fontSize: 14,
+          ),
+        ),
         StarRating(
-            editable: false, initialRating: 3.5, ratingSize: RatingSize.medium),
+          editable: false,
+          initialRating: _posting.getCurrentRating(),
+          ratingSize: RatingSize.small,
+        ),
       ],
     );
   }

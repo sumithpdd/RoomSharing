@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/dummy_data.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
 
@@ -12,6 +14,14 @@ class SavedPage extends StatefulWidget {
 }
 
 class _SavedPageState extends State<SavedPage> {
+  late List<Posting> _posting;
+
+  @override
+  void initState() {
+    _posting = DummyData.postings;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,6 +37,8 @@ class _SavedPageState extends State<SavedPage> {
           childAspectRatio: 3 / 4,
         ),
         itemBuilder: (context, index) {
+          Posting currentPosting = _posting[index];
+
           return Stack(
             children: [
               InkResponse(
@@ -34,7 +46,9 @@ class _SavedPageState extends State<SavedPage> {
                 onTap: () {
                   Navigator.pushNamed(context, ViewPostingPage.routeName);
                 },
-                child: PostingGridTile(),
+                child: PostingGridTile(
+                  posting: currentPosting,
+                ),
               ),
               Align(
                 alignment: Alignment.topRight,

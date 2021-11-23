@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/dummy_data.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
 
@@ -12,6 +14,14 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
+  late List<Posting> _posting;
+
+  @override
+  void initState() {
+    _posting = DummyData.postings;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,7 +51,7 @@ class _ExplorePageState extends State<ExplorePage> {
             GridView.builder(
               physics: ScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 5,
+              itemCount: _posting.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
@@ -49,12 +59,22 @@ class _ExplorePageState extends State<ExplorePage> {
                 childAspectRatio: 3 / 4,
               ),
               itemBuilder: (context, index) {
+                Posting currentPosting = _posting[index];
                 return InkResponse(
                   enableFeedback: true,
                   onTap: () {
-                    Navigator.pushNamed(context, ViewPostingPage.routeName);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ViewPostingPage(
+                          posting: currentPosting,
+                        ),
+                      ),
+                    );
                   },
-                  child: PostingGridTile(),
+                  child: PostingGridTile(
+                    posting: currentPosting,
+                  ),
                 );
               },
             )

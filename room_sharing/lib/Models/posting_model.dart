@@ -62,6 +62,10 @@ class Posting {
     }
   }
 
+  String getFullAddress() {
+    return address + ", " + city + ", " + country;
+  }
+
   String getAmenitiesString() {
     if (amenities.isEmpty) {
       return "";
@@ -73,13 +77,13 @@ class Posting {
   String getBedroomText() {
     String text = "";
     if (beds["small"] != 0) {
-      text += beds["small"].toString() + ' single/twin';
+      text += beds["small"].toString() + ' single/twin ';
     }
     if (beds["medium"] != 0) {
-      text += beds["medium"].toString() + ' double';
+      text += beds["medium"].toString() + ' double ';
     }
     if (beds["large"] != 0) {
-      text += beds["large"].toString() + ' queen/king';
+      text += beds["large"].toString() + ' queen/king ';
     }
     return text;
   }
@@ -97,9 +101,10 @@ class Posting {
   }
 
   void makeNewBooking(List<DateTime> dates) {
-    Booking newBooking = Booking();
-    newBooking.createBooking(
-        this, AppConstants.currentUser.createContactFromUser(), dates);
+    Booking newBooking = Booking(
+        posting: this,
+        contact: AppConstants.currentUser.createContactFromUser(),
+        dates: dates);
     bookings.add(newBooking);
   }
 
@@ -125,9 +130,11 @@ class Posting {
   }
 
   void postNewReview(String text, double rating) {
-    Review newReview = Review();
-    newReview.createReview(AppConstants.currentUser.createContactFromUser(),
-        text, rating, DateTime.now());
+    Review newReview = Review(
+        contact: AppConstants.currentUser.createContactFromUser(),
+        text: text,
+        rating: rating,
+        dateTime: DateTime.now());
     reviews.add(newReview);
   }
 }

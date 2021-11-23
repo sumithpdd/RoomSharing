@@ -78,9 +78,11 @@ class User extends Contact {
   }
 
   void postNewReview(String text, double rating) {
-    Review newReview = Review();
-    newReview.createReview(AppConstants.currentUser.createContactFromUser(),
-        text, rating, DateTime.now());
+    Review newReview = Review(
+        contact: AppConstants.currentUser.createContactFromUser(),
+        text: text,
+        rating: rating,
+        dateTime: DateTime.now());
     reviews.add(newReview);
   }
 }

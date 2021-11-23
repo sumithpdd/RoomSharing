@@ -1,19 +1,29 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_declarations, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Views/calendar_widgets.dart';
 import 'package:room_sharing/Views/text_widgets.dart';
 
 class BookPostingPage extends StatefulWidget {
   static final String routeName = '/BookPostingPageRoute';
+  final Posting posting;
 
-  const BookPostingPage({Key? key}) : super(key: key);
+  const BookPostingPage({Key? key, required this.posting}) : super(key: key);
 
   @override
   _BookPostingPageState createState() => _BookPostingPageState();
 }
 
 class _BookPostingPageState extends State<BookPostingPage> {
+  late Posting _posting;
+
+  @override
+  void initState() {
+    _posting = widget.posting;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +55,7 @@ class _BookPostingPageState extends State<BookPostingPage> {
                   itemBuilder: (context, index) {
                     return CalendarMonth(
                       monthIndex: index,
+                      unavailableDates: _posting.getAllBookedDates(),
                     );
                   },
                 ),
