@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/dummy_data.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
 
 import 'signup_page.dart';
@@ -21,6 +22,9 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.pushNamed(context, SignupPage.routeName);
   }
   void _login(){
+    DummyData.populateFields();
+    AppConstants.currentUser =DummyData.users[0];
+
     Navigator.pushNamed(context, GuestHomePage.routeName);
   }
   @override

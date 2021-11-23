@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_declarations
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
 import 'package:room_sharing/Views/text_widgets.dart';
 
@@ -14,6 +15,30 @@ class PersonalInfoPage extends StatefulWidget {
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
+  late TextEditingController _firstNameController;
+  late TextEditingController _lastNameController;
+  late TextEditingController _emailController;
+  late TextEditingController _cityController;
+  late TextEditingController _countryController;
+  late TextEditingController _bioController;
+
+  @override
+  void initState() {
+    _firstNameController =
+        TextEditingController(text: AppConstants.currentUser.firstName);
+    _lastNameController =
+        TextEditingController(text: AppConstants.currentUser.lastName);
+    _emailController =
+        TextEditingController(text: AppConstants.currentUser.email);
+    _cityController =
+        TextEditingController(text: AppConstants.currentUser.city);
+    _countryController =
+        TextEditingController(text: AppConstants.currentUser.country);
+    _bioController = TextEditingController(text: AppConstants.currentUser.bio);
+
+    super.initState();
+  }
+
   void _saveInfo() {
     Navigator.pushNamed(context, GuestHomePage.routeName);
   }
@@ -46,6 +71,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'First name'),
                         style: TextStyle(fontSize: 25.0),
+                        controller: _firstNameController,
                       ),
                     ),
                     Padding(
@@ -53,6 +79,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Last name'),
                         style: TextStyle(fontSize: 25.0),
+                        controller: _lastNameController,
                       ),
                     ),
                     Padding(
@@ -60,6 +87,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Email'),
                         style: TextStyle(fontSize: 25.0),
+                        enabled: false,
+                        controller: _emailController,
                       ),
                     ),
                     Padding(
@@ -67,6 +96,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Password'),
                         style: TextStyle(fontSize: 25.0),
+                        enabled: false,
                       ),
                     ),
                     Padding(
@@ -74,6 +104,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'City'),
                         style: TextStyle(fontSize: 25.0),
+                        controller: _cityController,
                       ),
                     ),
                     Padding(
@@ -81,6 +112,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Country'),
                         style: TextStyle(fontSize: 25.0),
+                        controller: _countryController,
                       ),
                     ),
                     Padding(
@@ -88,6 +120,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       child: TextFormField(
                         decoration: InputDecoration(labelText: 'Bio'),
                         style: TextStyle(fontSize: 25.0),
+                        controller: _bioController,
                         maxLines: 3,
                       ),
                     ),
@@ -101,8 +134,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                       backgroundColor: Colors.black,
                       radius: MediaQuery.of(context).size.width / 4.8,
                       child: CircleAvatar(
-                        backgroundImage:
-                            AssetImage('assets/images/sumith2020.jpg'),
+                        backgroundImage: AppConstants.currentUser.displayImage,
                         radius: MediaQuery.of(context).size.width / 5,
                       ),
                     ),

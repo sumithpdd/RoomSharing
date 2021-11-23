@@ -25,21 +25,22 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    if (AppConstants.isHosting) {
+    if (AppConstants.currentUser.isCurrentlyHosting) {
       _hostingTile = "Guest Dashboard";
-    }
-    else{
+    } else {
       _hostingTile = "Host Dashboard";
     }
     super.initState();
   }
 
   void _changeHosting() {
-    String routeName = AppConstants.isHosting
-        ? GuestHomePage.routeName
-        : HostHomePage.routeName;
-    AppConstants.isHosting = !AppConstants.isHosting;
-    Navigator.pushNamed(context, routeName);
+    if (AppConstants.currentUser.isCurrentlyHosting) {
+      AppConstants.currentUser.isCurrentlyHosting = false;
+      Navigator.pushNamed(context, GuestHomePage.routeName);
+    } else {
+      AppConstants.currentUser.isCurrentlyHosting = true;
+      Navigator.pushNamed(context, HostHomePage.routeName);
+    }
   }
 
   @override
@@ -63,8 +64,7 @@ class _AccountPageState extends State<AccountPage> {
                     backgroundColor: Colors.black,
                     radius: MediaQuery.of(context).size.width / 9.5,
                     child: CircleAvatar(
-                      backgroundImage:
-                          AssetImage('assets/images/sumith2020.jpg'),
+                      backgroundImage: AppConstants.currentUser.displayImage,
                       radius: MediaQuery.of(context).size.width / 10,
                     ),
                   ),
@@ -75,12 +75,12 @@ class _AccountPageState extends State<AccountPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        'Sumith Damodaran',
+                        AppConstants.currentUser.getFullName(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                       AutoSizeText(
-                        's@s.com',
+                        AppConstants.currentUser.email,
                         style: TextStyle(fontSize: 20),
                       ),
                     ],

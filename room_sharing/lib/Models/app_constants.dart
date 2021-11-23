@@ -8,7 +8,6 @@ class AppConstants {
   static const Color selectedIconColor = Colors.deepOrange;
   static const Color nonSelectedIconColor = Colors.black;
   static const Color nonSelectedGreyIconColor = Colors.grey;
-  static bool isHosting =false;
 
   static User currentUser= User();
   static final Map<int, String> monthDict = {
