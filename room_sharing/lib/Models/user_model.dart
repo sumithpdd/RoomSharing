@@ -1,4 +1,6 @@
+import 'package:room_sharing/Models/Conversation_model.dart';
 import 'package:room_sharing/Models/booking_model.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 
 import 'app_constants.dart';
 import 'contact_model.dart';
@@ -15,6 +17,8 @@ class User extends Contact {
 
   late List<Booking> bookings;
   late List<Review> reviews;
+  late List<Conversation> conversations;
+  late List<Posting> savedPosting;
 
   User({
     String firstName = "",
@@ -30,6 +34,8 @@ class User extends Contact {
     rating = 0;
     bookings = [];
     reviews = [];
+    conversations = [];
+    savedPosting = [];
   }
 
   void changeCurrentlyHosting(bool isHosting) {
@@ -48,6 +54,14 @@ class User extends Contact {
 
   void makeNewBooking(Booking newBooking) {
     bookings.add(newBooking);
+  }
+
+  void addSavedPosting(Posting posting) {
+    savedPosting.add(posting);
+  }
+
+  void removeSavedPosting(Posting posting) {
+    savedPosting.removeWhere((post) => post.name == posting.name);
   }
 
   double getCurrentRating() {
