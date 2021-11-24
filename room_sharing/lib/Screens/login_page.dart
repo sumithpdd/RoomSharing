@@ -23,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   }
   void _login(){
     DummyData.populateFields();
-    AppConstants.currentUser =DummyData.users[0];
+    AppConstants.currentUser =DummyData.users[1];
 
     Navigator.pushNamed(context, GuestHomePage.routeName);
   }

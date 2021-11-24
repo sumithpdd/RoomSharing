@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       //  BookPostingPage.routeName: (context) => BookPostingPage(),
       //  ConversationPage.routeName: (context) => ConversationPage(),
         HostHomePage.routeName: (context) => HostHomePage(),
-        CreatePostingPage.routeName: (context) => CreatePostingPage(),
+     //   CreatePostingPage.routeName: (context) => CreatePostingPage(),
       },
     );
   }

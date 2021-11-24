@@ -112,6 +112,7 @@ class DummyData {
       rating: 4.5,
       dateTime: DateTime(2021, 11, 11),
     );
+
     posting1.reviews.add(postingReview1);
     Review postingReview2 = Review(
       contact: user2.createContactFromUser(),
@@ -146,6 +147,9 @@ class DummyData {
 
     user1.bookings.add(booking1);
     user1.bookings.add(booking2);
-    user1.savedPosting.add(posting2);
+    user1.savedPostings.add(posting2);
+
+    user1.myPostings.add(posting1);
+    user2.myPostings.add(posting2);
   }
 }

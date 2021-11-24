@@ -18,7 +18,7 @@ class _SavedPageState extends State<SavedPage> {
 
   @override
   void initState() {
-    _savedPosting = AppConstants.currentUser.savedPosting;
+    _savedPosting = AppConstants.currentUser.savedPostings;
     super.initState();
   }
 

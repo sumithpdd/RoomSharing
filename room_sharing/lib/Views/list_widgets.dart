@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Models/message_model.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
 
@@ -255,13 +256,20 @@ class MessageListTile extends StatelessWidget {
 }
 
 class MyPostingListTile extends StatefulWidget {
-  const MyPostingListTile({Key? key}) : super(key: key);
+  final Posting posting;
+  const MyPostingListTile({Key? key,required this.posting}) : super(key: key);
 
   @override
   _MyPostingListTileState createState() => _MyPostingListTileState();
 }
 
 class _MyPostingListTileState extends State<MyPostingListTile> {
+  late Posting _posting;
+  @override
+  void initState() {
+    _posting = widget.posting;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -269,7 +277,7 @@ class _MyPostingListTileState extends State<MyPostingListTile> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 10.0),
         child: AutoSizeText(
-          'Awesome Apartment',
+          _posting.name,
           maxLines: 2,
           minFontSize: 20,
           style: TextStyle(fontWeight: FontWeight.bold),
@@ -278,7 +286,7 @@ class _MyPostingListTileState extends State<MyPostingListTile> {
       trailing: AspectRatio(
         aspectRatio: 3 / 2,
         child: Image(
-          image: AssetImage('assets/images/apartment.jpg'),
+          image: _posting.displayImages.first,
           fit: BoxFit.fitWidth,
         ),
       ),

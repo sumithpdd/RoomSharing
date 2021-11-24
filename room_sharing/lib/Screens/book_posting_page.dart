@@ -55,7 +55,7 @@ class _BookPostingPageState extends State<BookPostingPage> {
                   itemBuilder: (context, index) {
                     return CalendarMonth(
                       monthIndex: index,
-                      unavailableDates: _posting.getAllBookedDates(),
+                      bookedDates: _posting.getAllBookedDates(),
                     );
                   },
                 ),

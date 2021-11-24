@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Views/calendar_widgets.dart';
 import 'package:room_sharing/Views/list_widgets.dart';
 
@@ -12,6 +14,12 @@ class BookingsPage extends StatefulWidget {
 }
 
 class _BookingsPageState extends State<BookingsPage> {
+  List<DateTime> _bookedDates =[];
+  @override
+  void initState() {
+    _bookedDates=AppConstants.currentUser.getAllBookedDates();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -42,12 +50,13 @@ class _BookingsPageState extends State<BookingsPage> {
                 itemBuilder: (context, index) {
                   return CalendarMonth(
                     monthIndex: index,
+                    bookedDates: _bookedDates,
                   );
                 },
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20,25.0,0.0,25),
+              padding: const EdgeInsets.fromLTRB(20, 25.0, 0.0, 25),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -70,8 +79,10 @@ class _BookingsPageState extends State<BookingsPage> {
               padding: const EdgeInsets.only(top: 25.0, bottom: 25.0),
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 2,
+                  itemCount: AppConstants.currentUser.myPostings.length,
                   itemBuilder: (context, index) {
+                    Posting currentPosting =
+                        AppConstants.currentUser.myPostings[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 25),
                       child: InkResponse(
@@ -81,7 +92,9 @@ class _BookingsPageState extends State<BookingsPage> {
                                 border:
                                     Border.all(color: Colors.grey, width: 1.0),
                                 borderRadius: BorderRadius.circular(5)),
-                            child: MyPostingListTile()),
+                            child: MyPostingListTile(
+                              posting: currentPosting,
+                            )),
                       ),
                     );
                   }),

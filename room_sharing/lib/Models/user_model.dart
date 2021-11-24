@@ -1,5 +1,5 @@
-import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Models/booking_model.dart';
+import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Models/posting_model.dart';
 
 import 'app_constants.dart';
@@ -18,7 +18,8 @@ class User extends Contact {
   late List<Booking> bookings;
   late List<Review> reviews;
   late List<Conversation> conversations;
-  late List<Posting> savedPosting;
+  late List<Posting> savedPostings;
+  late List<Posting> myPostings;
 
   User({
     String firstName = "",
@@ -35,7 +36,8 @@ class User extends Contact {
     bookings = [];
     reviews = [];
     conversations = [];
-    savedPosting = [];
+    savedPostings = [];
+    myPostings = [];
   }
 
   void changeCurrentlyHosting(bool isHosting) {
@@ -57,11 +59,11 @@ class User extends Contact {
   }
 
   void addSavedPosting(Posting posting) {
-    savedPosting.add(posting);
+    savedPostings.add(posting);
   }
 
   void removeSavedPosting(Posting posting) {
-    savedPosting.removeWhere((post) => post.name == posting.name);
+    savedPostings.removeWhere((post) => post.name == posting.name);
   }
 
   double getCurrentRating() {
@@ -96,6 +98,7 @@ class User extends Contact {
     });
     return previousTrips;
   }
+
   List<Booking> getUpcomingTrips() {
     List<Booking> upcomingTrips = [];
     bookings.forEach((booking) {
@@ -106,4 +109,13 @@ class User extends Contact {
     return upcomingTrips;
   }
 
+  List<DateTime> getAllBookedDates() {
+    List<DateTime> allBookedDates = [];
+    myPostings.forEach((posting) {
+      posting.bookings.forEach((booking) {
+        allBookedDates.addAll(booking.dates);
+      });
+    });
+    return allBookedDates;
+  }
 }
