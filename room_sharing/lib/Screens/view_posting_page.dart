@@ -159,8 +159,13 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                                 backgroundColor: Colors.black,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(
-                                        context, ViewProfilePage.routeName);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ViewProfilePage(
+                                            contact: _posting.host),
+                                      ),
+                                    );
                                   },
                                   child: CircleAvatar(
                                     backgroundImage: _posting.host.displayImage,

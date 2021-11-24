@@ -128,18 +128,18 @@ class DummyData {
         posting: posting2,
         contact: user1.createContactFromUser(),
         dates: [
-          DateTime(2021, 11, 11),
-          DateTime(2021, 11, 12),
-          DateTime(2021, 11, 15)
+          DateTime(2021, 12, 11),
+          DateTime(2021, 12, 12),
+          DateTime(2021, 12, 15)
         ]);
 
     Booking booking2 = Booking(
         posting: posting2,
         contact: user1.createContactFromUser(),
         dates: [
-          DateTime(2021, 11, 21),
-          DateTime(2021, 11, 22),
-          DateTime(2021, 11, 23)
+          DateTime(2021, 10, 21),
+          DateTime(2021, 10, 22),
+          DateTime(2021, 10, 23)
         ]);
 
     posting2.bookings.add(booking1);

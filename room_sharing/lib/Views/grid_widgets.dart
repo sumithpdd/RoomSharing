@@ -2,6 +2,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/booking_model.dart';
 import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Views/rating_widget.dart';
 
@@ -69,13 +70,21 @@ class _PostingGridTileState extends State<PostingGridTile> {
 }
 
 class TripGridTile extends StatefulWidget {
-  const TripGridTile({Key? key}) : super(key: key);
+  final Booking booking;
+  const TripGridTile({Key? key,required this.booking}) : super(key: key);
 
   @override
   _TripGridTileState createState() => _TripGridTileState();
 }
 
 class _TripGridTileState extends State<TripGridTile> {
+  late Booking _booking;
+  @override
+  void initState() {
+
+    _booking = widget.booking;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -87,38 +96,38 @@ class _TripGridTileState extends State<TripGridTile> {
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: AssetImage('assets/images/apartment.jpg'),
+              image: _booking.posting.displayImages.first,
               fit: BoxFit.fill,
             )),
           ),
         ),
         AutoSizeText(
-          'Apartment  - London tower bridge',
+          _booking.posting.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 17,
           ),
         ),
-        AutoSizeText(
-          'London, UK',
+    AutoSizeText(
+        "${_booking.posting.city} , ${_booking.posting.country}",
           style: TextStyle(
             fontSize: 16,
           ),
         ),
         Text(
-          '\$120 / night',
+          '\$${_booking.posting.price} / night',
           style: TextStyle(
             fontSize: 15,
           ),
         ),
         Text(
-          '25 Dec 2021 - ',
+          '${_booking.getFirstDate()} - ',
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
-          ' 05 Jan 2022',
+          _booking.getLastDate(),
           style: TextStyle(
             fontWeight: FontWeight.bold,
           ),

@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/booking_model.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
 
 import 'view_posting_page.dart';
@@ -29,8 +31,11 @@ class _TripsPageState extends State<TripsPage> {
               padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
               child: Container(
                 height: MediaQuery.of(context).size.height / 3,
+                width: double.infinity,
                 child: ListView.builder(
                   itemBuilder: (context, index) {
+                    Booking currentBooking =
+                        AppConstants.currentUser.getUpcomingTrips()[index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 15.0),
                       child: Container(
@@ -38,15 +43,23 @@ class _TripsPageState extends State<TripsPage> {
                         child: InkResponse(
                           enableFeedback: true,
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, ViewPostingPage.routeName);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewPostingPage(
+                                  posting: currentBooking.posting,
+                                ),
+                              ),
+                            );
                           },
-                          child: TripGridTile(),
+                          child: TripGridTile(
+                            booking: currentBooking,
+                          ),
                         ),
                       ),
                     );
                   },
-                  itemCount: 3,
+                  itemCount: AppConstants.currentUser.getUpcomingTrips().length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                 ),
@@ -60,8 +73,11 @@ class _TripsPageState extends State<TripsPage> {
               padding: const EdgeInsets.only(top: 15.0, bottom: 25.0),
               child: Container(
                 height: MediaQuery.of(context).size.height / 3,
+                width: double.infinity,
                 child: ListView.builder(
                   itemBuilder: (context, index) {
+                    Booking currentBooking =
+                        AppConstants.currentUser.getPreviousTrips()[index];
                     return Padding(
                       padding: const EdgeInsets.only(right: 15.0),
                       child: Container(
@@ -69,15 +85,23 @@ class _TripsPageState extends State<TripsPage> {
                         child: InkResponse(
                           enableFeedback: true,
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, ViewPostingPage.routeName);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ViewPostingPage(
+                                  posting: currentBooking.posting,
+                                ),
+                              ),
+                            );
                           },
-                          child: TripGridTile(),
+                          child: TripGridTile(
+                            booking: currentBooking,
+                          ),
                         ),
                       ),
                     );
                   },
-                  itemCount: 2,
+                  itemCount: AppConstants.currentUser.getPreviousTrips().length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                 ),

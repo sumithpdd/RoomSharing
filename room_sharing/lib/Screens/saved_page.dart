@@ -1,7 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:room_sharing/Models/dummy_data.dart';
+import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Screens/view_posting_page.dart';
 import 'package:room_sharing/Views/grid_widgets.dart';
@@ -14,11 +14,11 @@ class SavedPage extends StatefulWidget {
 }
 
 class _SavedPageState extends State<SavedPage> {
-  late List<Posting> _posting;
+  late List<Posting> _savedPosting;
 
   @override
   void initState() {
-    _posting = DummyData.postings;
+    _savedPosting = AppConstants.currentUser.savedPosting;
     super.initState();
   }
 
@@ -29,7 +29,7 @@ class _SavedPageState extends State<SavedPage> {
       child: GridView.builder(
         physics: ScrollPhysics(),
         shrinkWrap: true,
-        itemCount: 2,
+        itemCount: _savedPosting.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 15,
@@ -37,15 +37,22 @@ class _SavedPageState extends State<SavedPage> {
           childAspectRatio: 3 / 4,
         ),
         itemBuilder: (context, index) {
-          Posting currentPosting = _posting[index];
+          Posting currentPosting = _savedPosting[index];
 
           return Stack(
             children: [
               InkResponse(
                 enableFeedback: true,
                 onTap: () {
-                  Navigator.pushNamed(context, ViewPostingPage.routeName);
-                },
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewPostingPage(
+                        posting: currentPosting,
+                      ),
+                    ),
+                  );
+                 },
                 child: PostingGridTile(
                   posting: currentPosting,
                 ),

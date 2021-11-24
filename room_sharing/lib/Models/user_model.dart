@@ -85,4 +85,25 @@ class User extends Contact {
         dateTime: DateTime.now());
     reviews.add(newReview);
   }
+
+  List<Booking> getPreviousTrips() {
+    List<Booking> previousTrips = [];
+
+    bookings.forEach((booking) {
+      if (booking.dates.last.compareTo(DateTime.now()) <= 0) {
+        previousTrips.add(booking);
+      }
+    });
+    return previousTrips;
+  }
+  List<Booking> getUpcomingTrips() {
+    List<Booking> upcomingTrips = [];
+    bookings.forEach((booking) {
+      if (booking.dates.last.compareTo(DateTime.now()) > 0) {
+        upcomingTrips.add(booking);
+      }
+    });
+    return upcomingTrips;
+  }
+
 }

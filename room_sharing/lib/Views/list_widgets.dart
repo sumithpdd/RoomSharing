@@ -30,9 +30,22 @@ class _ReviewListTileState extends State<ReviewListTile> {
       children: [
         Row(
           children: [
-            CircleAvatar(
-              backgroundImage: _review.contact.displayImage,
-              radius: MediaQuery.of(context).size.width / 15,
+            InkResponse(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewProfilePage(
+                      contact:
+                      _review.contact,
+                    ),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: _review.contact.displayImage,
+                radius: MediaQuery.of(context).size.width / 15,
+              ),
             ),
               Padding(
               padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -72,6 +85,7 @@ class _ConversationListTileState extends State<ConversationListTile> {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
+
           Navigator.pushNamed(context, ViewProfilePage.routeName);
         },
         child: CircleAvatar(
