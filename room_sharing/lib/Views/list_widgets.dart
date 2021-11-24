@@ -2,6 +2,9 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/conversation_model.dart';
+import 'package:room_sharing/Models/message_model.dart';
 import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
 
@@ -73,36 +76,50 @@ class _ReviewListTileState extends State<ReviewListTile> {
 }
 
 class ConversationListTile extends StatefulWidget {
-  const ConversationListTile({Key? key}) : super(key: key);
+  final Conversation conversation;
+    const ConversationListTile({Key? key,required this.conversation}) : super(key: key);
 
   @override
   _ConversationListTileState createState() => _ConversationListTileState();
 }
 
 class _ConversationListTileState extends State<ConversationListTile> {
+  late Conversation _conversation ;
+  @override
+  void initState() {
+    _conversation = widget.conversation;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: GestureDetector(
         onTap: () {
-
-          Navigator.pushNamed(context, ViewProfilePage.routeName);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ViewProfilePage(
+                contact:
+                _conversation.otherContact,
+              ),
+            ),
+          );
         },
         child: CircleAvatar(
-          backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
+          backgroundImage: _conversation.otherContact.displayImage,
           radius: MediaQuery.of(context).size.width / 14.0,
         ),
       ),
       title: Text(
-        'Sammy Boy',
+        _conversation.otherContact.firstName,
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22.5),
       ),
       subtitle: Text(
-        'Is it Available?',
+        _conversation.getLastMessageText(),
         style: TextStyle(fontSize: 20),
       ),
       trailing: Text(
-        'Dec 30',
+        _conversation.getLastMessageDateTime(),
         style: TextStyle(fontSize: 15),
       ),
       contentPadding: EdgeInsets.fromLTRB(25, 15, 25, 15),
@@ -111,23 +128,102 @@ class _ConversationListTileState extends State<ConversationListTile> {
 }
 
 class MessageListTile extends StatelessWidget {
-  const MessageListTile({Key? key}) : super(key: key);
+  final Message message;
+
+  const MessageListTile({Key? key,required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if(message.sender.firstName == AppConstants.currentUser.firstName){
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(35, 15, 15, 15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 10.0),
+                child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          message.text,
+                          textWidthBasis: TextWidthBasis.parent,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            message.getMessageDateTime(),
+                            style: TextStyle(fontSize: 15.0),
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewProfilePage(
+                      contact:
+                      AppConstants.currentUser.createContactFromUser(),
+                    ),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: AppConstants.currentUser.displayImage,
+                radius: MediaQuery.of(context).size.width / 20,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    else{
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(35, 15, 15, 15.0),
+      padding: const EdgeInsets.fromLTRB(15, 15, 35, 15.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ViewProfilePage(
+                    contact:message.sender,
+                  ),
+                ),
+              );
+            },
+            child: CircleAvatar(
+              backgroundImage:message.sender.displayImage,
+              radius: MediaQuery.of(context).size.width / 20,
+            ),
+          ),
           Flexible(
             child: Padding(
-              padding: const EdgeInsets.only(right: 10.0),
+              padding: const EdgeInsets.only(left: 10.0),
               child: Container(
                 padding: EdgeInsets.all(15.0),
                 decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: Colors.yellow,
                     borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -136,7 +232,7 @@ class MessageListTile extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 10.0),
                       child: Text(
-                        'this is a long long message and this will be over flowing into multiple lines',
+                        message.text,
                         textWidthBasis: TextWidthBasis.parent,
                         style: TextStyle(fontSize: 20.0),
                       ),
@@ -144,77 +240,18 @@ class MessageListTile extends StatelessWidget {
                     Align(
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          'December 1',
+                          message.getMessageDateTime(),
                           style: TextStyle(fontSize: 15.0),
                         ))
                   ],
                 ),
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.pushNamed(context, ViewProfilePage.routeName);
-            },
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
-              radius: MediaQuery.of(context).size.width / 20,
-            ),
-          ),
+          )
         ],
       ),
     );
-
-    // return Padding(
-    //   padding: const EdgeInsets.fromLTRB(15, 15, 35, 15.0),
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.start,
-    //     crossAxisAlignment: CrossAxisAlignment.end,
-    //     children: [
-    //       GestureDetector(
-    //         onTap: () {
-    //           Navigator.pushNamed(context, ViewProfilePage.routeName);
-    //         },
-    //         child: CircleAvatar(
-    //           backgroundImage: AssetImage('assets/images/defaultAvatar.jpg'),
-    //           radius: MediaQuery.of(context).size.width / 20,
-    //         ),
-    //       ),
-    //       Flexible(
-    //         child: Padding(
-    //           padding: const EdgeInsets.only(left: 10.0),
-    //           child: Container(
-    //             padding: EdgeInsets.all(15.0),
-    //             decoration: BoxDecoration(
-    //                 color: Colors.yellow,
-    //                 borderRadius: BorderRadius.circular(10)),
-    //             child: Column(
-    //               mainAxisSize: MainAxisSize.max,
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: [
-    //                 Padding(
-    //                   padding: const EdgeInsets.only(bottom: 10.0),
-    //                   child: Text(
-    //                     'this is a long long message and this will be over flowing into multiple lines',
-    //                     textWidthBasis: TextWidthBasis.parent,
-    //                     style: TextStyle(fontSize: 20.0),
-    //                   ),
-    //                 ),
-    //                 Align(
-    //                     alignment: Alignment.bottomRight,
-    //                     child: Text(
-    //                       'December 1',
-    //                       style: TextStyle(fontSize: 15.0),
-    //                     ))
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
-  }
+  }}
 }
 
 class MyPostingListTile extends StatefulWidget {

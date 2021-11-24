@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_declarations, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_declarations, prefer_const_literals_to_create_immutables, unused_import
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +13,9 @@ import 'package:room_sharing/Views/text_widgets.dart';
 
 class ViewProfilePage extends StatefulWidget {
   static final String routeName = '/ViewProfilePageRoute';
-  Contact contact;
+  final  Contact contact;
 
-  ViewProfilePage({Key? key, required this.contact}) : super(key: key);
+  const ViewProfilePage({Key? key, required this.contact}) : super(key: key);
 
   @override
   _ViewProfilePageState createState() => _ViewProfilePageState();

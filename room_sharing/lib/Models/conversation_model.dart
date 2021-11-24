@@ -7,6 +7,7 @@ class Conversation {
   late Message lastMessage;
 
   Conversation() {
+    otherContact = Contact();
     messages = [];
   }
 

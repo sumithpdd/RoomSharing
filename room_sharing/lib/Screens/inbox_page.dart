@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/app_constants.dart';
+import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Screens/conversation_page.dart';
 import 'package:room_sharing/Views/list_widgets.dart';
 
@@ -17,15 +19,25 @@ class _InboxPageState extends State<InboxPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: ListView.builder(
-          itemCount: 2,
+          itemCount: AppConstants.currentUser.conversations.length,
           itemExtent: MediaQuery.of(context).size.height / 7,
           itemBuilder: (context, index) {
+            Conversation currentConversation =
+                AppConstants.currentUser.conversations[index];
             return InkResponse(
-                onTap: (){
-                  Navigator.pushNamed(context, ConversationPage.routeName);
-
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ConversationPage(
+                        conversation: currentConversation,
+                      ),
+                    ),
+                  );
                 },
-                child: ConversationListTile());
+                child: ConversationListTile(
+                  conversation: currentConversation,
+                ));
           }),
     );
   }

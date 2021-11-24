@@ -1,4 +1,4 @@
-import 'package:room_sharing/Models/Conversation_model.dart';
+import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Models/booking_model.dart';
 import 'package:room_sharing/Models/posting_model.dart';
 

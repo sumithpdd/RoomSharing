@@ -1,4 +1,4 @@
-import 'package:room_sharing/Models/Conversation_model.dart';
+import 'package:room_sharing/Models/conversation_model.dart';
 import 'package:room_sharing/Models/message_model.dart';
 import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Models/user_model.dart';
@@ -44,7 +44,7 @@ class DummyData {
 
     //Adding conversation with some messages to user1
     Conversation conversation = Conversation();
-    conversation.createConversation(user2.createContactFromUser(), []);
+    conversation.createConversation(user1.createContactFromUser(), []);
 
     Message message1 = Message();
     message1.createMessage(

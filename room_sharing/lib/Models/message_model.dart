@@ -7,6 +7,12 @@ class Message {
   late String text;
   late DateTime dateTime;
 
+  Message() {
+    sender = Contact();
+    text = "";
+    dateTime = DateTime.now();
+  }
+
   void createMessage(Contact sender, String text, DateTime dateTime) {
     sender = sender;
     text = text;
@@ -38,6 +44,6 @@ class Message {
     String hours = time.substring(0, 2);
     String minutes = time.substring(2);
 
-    return hours + ":" + minutes;
+    return hours +  minutes;
   }
 }
