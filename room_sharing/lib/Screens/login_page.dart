@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Models/dummy_data.dart';
+import 'package:room_sharing/Models/user_model.dart';
 import 'package:room_sharing/Screens/guest_home_page.dart';
 
 import 'signup_page.dart';
+import 'package:room_sharing/Models/user_model.dart' as app_user;
 
 class LoginPage extends StatefulWidget {
   static const String routeName = '/loginPageRoute';
@@ -17,16 +20,34 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
 
-  void _signup(){
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  void _signup() {
     Navigator.pushNamed(context, SignupPage.routeName);
   }
-  void _login(){
-    DummyData.populateFields();
-    AppConstants.currentUser =DummyData.users[1];
 
-    Navigator.pushNamed(context, GuestHomePage.routeName);
+  void _login() {
+    if (_formKey.currentState!.validate()) {
+      FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text)
+          .then((firebaseUser) {
+        String userId = firebaseUser.user!.uid;
+        app_user.User user = app_user.User();
+        user.id = userId;
+
+        //fetch rest of user info
+        DummyData.populateFields();
+        AppConstants.currentUser = DummyData.users[1];
+
+        Navigator.pushNamed(context, GuestHomePage.routeName);
+      });
+    }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,12 +62,20 @@ class _LoginPageState extends State<LoginPage> {
                 textAlign: TextAlign.center,
               ),
               Form(
+                key: _formKey,
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 25.0),
                     child: TextFormField(
                       decoration: InputDecoration(labelText: 'Username/email'),
                       style: TextStyle(fontSize: 25.0),
+                      validator: (text) {
+                        if (!text!.contains('@')) {
+                          return 'Please enter a vaild email';
+                        }
+                        return null;
+                      },
+                      controller: _emailController,
                     ),
                   ),
                   Padding(
@@ -54,6 +83,14 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextFormField(
                       decoration: InputDecoration(labelText: 'Password'),
                       style: TextStyle(fontSize: 25.0),
+                      obscureText: true,
+                      validator: (text) {
+                        if (text!.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
+                      controller: _passwordController,
                     ),
                   ),
                 ]),
@@ -67,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
-
                     ),
                   ),
                   color: Colors.blue,
@@ -78,19 +114,19 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 30.0),
                 child: MaterialButton(
-                  onPressed: _signup ,
+                  onPressed: _signup,
                   child: Text(
                     'Sign up',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25.0,
-
                     ),
                   ),
                   color: Colors.grey,
                   height: MediaQuery.of(context).size.height / 12,
                   minWidth: double.infinity,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               )
             ],

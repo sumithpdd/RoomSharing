@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'user_model.dart';
 
 class Contact {
+  String id;
   late String firstName;
   late String lastName;
   late String imagePath;
   late AssetImage displayImage;
 
-  Contact({this.firstName = "", this.lastName = "", this.imagePath = ""}) {
+  Contact(
+      {this.id = "",
+      this.firstName = "",
+      this.lastName = "",
+      this.imagePath = ""}) {
     displayImage = AssetImage(imagePath);
   }
 

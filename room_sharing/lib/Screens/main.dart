@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Screens/conversation_page.dart';
@@ -13,7 +14,9 @@ import 'package:room_sharing/Screens/personal_info_page.dart';
 import 'package:room_sharing/Screens/signup_page.dart';
 import 'package:room_sharing/Screens/view_profile_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -35,12 +38,12 @@ class MyApp extends StatelessWidget {
         SignupPage.routeName: (context) => SignupPage(),
         GuestHomePage.routeName: (context) => GuestHomePage(),
         PersonalInfoPage.routeName: (context) => PersonalInfoPage(),
-       // ViewProfilePage.routeName: (context) => ViewProfilePage(),
+        // ViewProfilePage.routeName: (context) => ViewProfilePage(),
         // ViewPostingPage.routeName: (context) => ViewPostingPage(),
-      //  BookPostingPage.routeName: (context) => BookPostingPage(),
-      //  ConversationPage.routeName: (context) => ConversationPage(),
+        //  BookPostingPage.routeName: (context) => BookPostingPage(),
+        //  ConversationPage.routeName: (context) => ConversationPage(),
         HostHomePage.routeName: (context) => HostHomePage(),
-     //   CreatePostingPage.routeName: (context) => CreatePostingPage(),
+        //   CreatePostingPage.routeName: (context) => CreatePostingPage(),
       },
     );
   }

@@ -22,6 +22,7 @@ class User extends Contact {
   late List<Posting> myPostings;
 
   User({
+    String id = "",
     String firstName = "",
     String lastName = "",
     String imagePath = "",

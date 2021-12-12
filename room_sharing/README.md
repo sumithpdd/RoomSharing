@@ -28,3 +28,10 @@ https://pub.dev/packages/auto_size_text
   -- Trips pages (my postings and edit posting)
   -- Conversation pages (inbox and conversation page)
   -- Bookings page 
+
+## Install firebase core
+
+To use firebase , Auth and cloud datastore
+
+firebase_core: ^1.10.0
+firebase_auth: ^3.2.0
