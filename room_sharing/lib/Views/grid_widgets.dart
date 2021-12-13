@@ -21,6 +21,9 @@ class _PostingGridTileState extends State<PostingGridTile> {
   @override
   void initState() {
     _posting = widget.posting;
+    _posting.getFirstImageFromStorage().whenComplete(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -32,13 +35,16 @@ class _PostingGridTileState extends State<PostingGridTile> {
       children: [
         AspectRatio(
           aspectRatio: 3 / 2,
-          child: Container(
-            decoration: BoxDecoration(
-                image: DecorationImage(
-              image: _posting.displayImages.first,
-              fit: BoxFit.fill,
-            )),
-          ),
+          child: (_posting.displayImages.isEmpty
+              ? Container()
+              : Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: _posting.displayImages.first,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                )),
         ),
         AutoSizeText(
           '${_posting.type}  - ${_posting.city} , ${_posting.country}',
@@ -71,7 +77,7 @@ class _PostingGridTileState extends State<PostingGridTile> {
 
 class TripGridTile extends StatefulWidget {
   final Booking booking;
-  const TripGridTile({Key? key,required this.booking}) : super(key: key);
+  const TripGridTile({Key? key, required this.booking}) : super(key: key);
 
   @override
   _TripGridTileState createState() => _TripGridTileState();
@@ -81,10 +87,10 @@ class _TripGridTileState extends State<TripGridTile> {
   late Booking _booking;
   @override
   void initState() {
-
     _booking = widget.booking;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -96,26 +102,26 @@ class _TripGridTileState extends State<TripGridTile> {
           child: Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-              image: _booking.posting.displayImages.first,
+              image: _booking.posting!.displayImages.first,
               fit: BoxFit.fill,
             )),
           ),
         ),
         AutoSizeText(
-          _booking.posting.name,
+          _booking.posting!.name,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 17,
           ),
         ),
-    AutoSizeText(
-        "${_booking.posting.city} , ${_booking.posting.country}",
+        AutoSizeText(
+          "${_booking.posting!.city} , ${_booking.posting!.country}",
           style: TextStyle(
             fontSize: 16,
           ),
         ),
         Text(
-          '\$${_booking.posting.price} / night',
+          '\$${_booking.posting!.price} / night',
           style: TextStyle(
             fontSize: 15,
           ),

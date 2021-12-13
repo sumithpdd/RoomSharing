@@ -5,10 +5,10 @@ import 'package:room_sharing/Models/app_constants.dart';
 
 class CalendarMonth extends StatefulWidget {
   final int monthIndex;
-  final List<DateTime>? bookedDates;
+  final List<DateTime> bookedDates;
 
   const CalendarMonth(
-      {Key? key, required this.monthIndex,required this.bookedDates})
+      {Key? key, required this.monthIndex, required this.bookedDates})
       : super(key: key);
 
   @override
@@ -72,7 +72,7 @@ class _CalendarMonthState extends State<CalendarMonth> {
                 crossAxisCount: 7, childAspectRatio: 1 / 1),
             itemBuilder: (context, index) {
               MonthTile monthTile = _monthTiles[index];
-              if (widget.bookedDates!.contains(monthTile.dateTime)) {
+              if (widget.bookedDates.contains(monthTile.dateTime)) {
                 return MaterialButton(
                   onPressed: null,
                   child: monthTile,

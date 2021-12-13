@@ -16,7 +16,7 @@ class DummyData {
     User user1 = User(
         firstName: 'Sumith',
         lastName: 'Damodaran',
-        imagePath: 'assets/images/sumith2020.jpg',
+        //  imagePath: 'assets/images/sumith2020.jpg',
         email: 'spd@gmail.com',
         bio: 'I build products',
         city: 'london',
@@ -25,7 +25,7 @@ class DummyData {
     User user2 = User(
         firstName: 'Sammy',
         lastName: 'Boy',
-        imagePath: 'assets/images/defaultAvatar.jpg',
+        //imagePath: 'assets/images/defaultAvatar.jpg',
         email: 'sammyboy@gmail.com',
         bio: 'Sammy is cool',
         city: 'New York',
@@ -65,6 +65,7 @@ class DummyData {
 
     //Posting
     Posting posting1 = Posting(
+        id: '1',
         name: 'Cool Casa',
         type: 'House',
         price: 120,
@@ -73,10 +74,10 @@ class DummyData {
         city: 'London',
         country: 'United Kingdom',
         host: user1.createContactFromUser());
-    posting1.setImages([
-      'assets/images/apartment.jpg',
-      'assets/images/interior1.jpg',
-    ]);
+    // posting1.setImages([
+    //   'assets/images/apartment.jpg',
+    //   'assets/images/interior1.jpg',
+    // ]);
     posting1.amenities = ['washers', 'dryer', 'iron', 'coffee machine'];
     posting1.beds = {
       'small': 0,
@@ -86,6 +87,7 @@ class DummyData {
     posting1.baths = {'full': 2, 'half': 1};
 
     Posting posting2 = Posting(
+        id: '2',
         name: 'Awesome Apartment',
         type: 'Apartment',
         price: 100,
@@ -94,10 +96,10 @@ class DummyData {
         city: 'London',
         country: 'United Kingdom',
         host: user2.createContactFromUser());
-    posting2.setImages([
-      'assets/images/interior0.jpg',
-      'assets/images/interior1.jpg',
-    ]);
+    // posting2.setImages([
+    //   'assets/images/interior0.jpg',
+    //   'assets/images/interior1.jpg',
+    // ]);
     posting2.amenities = ['dishwasher', 'Cable', 'Wifi'];
     posting2.beds = {
       'small': 1,

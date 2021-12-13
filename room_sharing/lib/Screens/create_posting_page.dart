@@ -26,7 +26,7 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
   ];
   late Map<String, int> _beds;
   late Map<String, int> _baths;
-  late List<AssetImage> _images;
+  late List<MemoryImage> _images;
 
   late TextEditingController _nameController;
   late TextEditingController _priceController;
@@ -40,7 +40,6 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
   void initState() {
     _setupInitialValues();
     _houseType = _houseTypes[0];
-
 
     super.initState();
   }
@@ -59,10 +58,12 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
         'medium': 0,
         'large': 0,
       };
-      _baths = {'full': 0, 'half': 0,};
+      _baths = {
+        'full': 0,
+        'half': 0,
+      };
       _images = [];
-    }
-    else {
+    } else {
       _nameController = TextEditingController(text: widget.posting!.name);
       _priceController =
           TextEditingController(text: widget.posting!.price.toString());
@@ -77,9 +78,7 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
       _baths = widget.posting!.baths;
       _images = widget.posting!.displayImages;
     }
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -112,7 +111,7 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
                           padding: const EdgeInsets.only(top: 25.0),
                           child: TextFormField(
                             decoration:
-                            InputDecoration(labelText: 'Posting name'),
+                                InputDecoration(labelText: 'Posting name'),
                             style: TextStyle(fontSize: 25.0),
                             controller: _nameController,
                           ),
@@ -145,7 +144,7 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
                               Expanded(
                                 child: TextFormField(
                                   decoration:
-                                  InputDecoration(labelText: 'Price'),
+                                      InputDecoration(labelText: 'Price'),
                                   style: TextStyle(fontSize: 25.0),
                                   keyboardType: TextInputType.number,
                                   controller: _priceController,
@@ -247,12 +246,12 @@ class _CreatePostingPageState extends State<CreatePostingPage> {
                         ),
                         Padding(
                             padding:
-                            const EdgeInsets.only(top: 25.0, bottom: 25.0),
+                                const EdgeInsets.only(top: 25.0, bottom: 25.0),
                             child: GridView.builder(
                                 shrinkWrap: true,
                                 itemCount: _images.length + 1,
                                 gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 2,
                                   mainAxisSpacing: 25,
                                   crossAxisSpacing: 25,

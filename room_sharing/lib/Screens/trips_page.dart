@@ -16,6 +16,11 @@ class TripsPage extends StatefulWidget {
 
 class _TripsPageState extends State<TripsPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
@@ -47,7 +52,7 @@ class _TripsPageState extends State<TripsPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ViewPostingPage(
-                                  posting: currentBooking.posting,
+                                  posting: currentBooking.posting!,
                                 ),
                               ),
                             );
@@ -89,7 +94,7 @@ class _TripsPageState extends State<TripsPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ViewPostingPage(
-                                  posting: currentBooking.posting,
+                                  posting: currentBooking.posting!,
                                 ),
                               ),
                             );

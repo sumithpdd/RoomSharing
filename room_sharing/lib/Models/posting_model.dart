@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
@@ -7,19 +9,20 @@ import 'package:room_sharing/Models/review_model.dart';
 import 'contact_model.dart';
 
 class Posting {
-  final String name;
-  final String type;
-  final double price;
-  final String description;
-  final String address;
-  final String city;
-  final String country;
-  final double rating;
+  final String id;
+  String name;
+  String type;
+  double price;
+  String description;
+  String address;
+  String city;
+  String country;
+  double rating;
 
-  final Contact host;
+  late Contact? host;
 
-  late List<String> imagePaths;
-  late List<AssetImage> displayImages;
+  late List<String> imageNames;
+  late List<MemoryImage> displayImages;
   late List<String> amenities;
 
   late Map<String, int> beds;
@@ -28,6 +31,7 @@ class Posting {
   late List<Review> reviews;
 
   Posting({
+    required this.id,
     this.name = "",
     this.type = "",
     this.price = 0,
@@ -36,9 +40,9 @@ class Posting {
     this.city = "",
     this.country = "",
     this.rating = 0,
-    required this.host,
+    this.host,
   }) {
-    imagePaths = [];
+    imageNames = [];
     displayImages = [];
     amenities = [];
     beds = {};
@@ -55,12 +59,12 @@ class Posting {
     return numGuests;
   }
 
-  void setImages(List<String> imagePaths) {
-    this.imagePaths = imagePaths;
-    for (var imagePath in imagePaths) {
-      displayImages.add(AssetImage(imagePath));
-    }
-  }
+  // void setImages(List<String> imagePaths) {
+  //   this.imageNames = imagePaths;
+  //   for (var imagePath in imagePaths) {
+  //     displayImages.add(AssetImage(imagePath));
+  //   }
+  // }
 
   String getFullAddress() {
     return address + ", " + city + ", " + country;
@@ -111,7 +115,7 @@ class Posting {
   List<DateTime> getAllBookedDates() {
     List<DateTime> dates = [];
     bookings.forEach((booking) {
-      dates.addAll(booking.dates);
+      dates.addAll(booking.dates!);
     });
     return dates;
   }
@@ -123,7 +127,7 @@ class Posting {
     double rating = 0;
 
     reviews.forEach((review) {
-      rating += review.rating;
+      rating += review.rating!;
     });
     rating /= reviews.length;
     return rating;
@@ -136,5 +140,78 @@ class Posting {
         rating: rating,
         dateTime: DateTime.now());
     reviews.add(newReview);
+  }
+
+  Future<void> getPostingInfoFromFirestore() async {
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('postings').doc(id).get();
+    getPostingInfoFromSnapshot(snapshot);
+  }
+
+  void getPostingInfoFromSnapshot(DocumentSnapshot snapshot) {
+    address = snapshot['address'] ?? "";
+    amenities = List<String>.from(snapshot['amenities']);
+    address = snapshot['address'] ?? "";
+    baths = Map<String, int>.from(snapshot['baths']);
+    beds = Map<String, int>.from(snapshot['beds']);
+    city = snapshot['city'];
+    country = snapshot['country'];
+    description = snapshot['description'];
+    String hostID = snapshot['hostID'];
+    host = Contact(id: hostID);
+
+    imageNames = List<String>.from(snapshot['imageNames']);
+    name = snapshot['name'];
+    price = snapshot['price'].toDouble();
+    rating = snapshot['rating'].toDouble();
+    type = snapshot['type'];
+  }
+
+  Future<MemoryImage> getFirstImageFromStorage() async {
+    if (displayImages.isNotEmpty) {
+      return displayImages.first;
+    }
+    final String imagePath = "postingImages/$id/${imageNames.first}";
+    final imageData = await FirebaseStorage.instance
+        .ref()
+        .child(imagePath)
+        .getData(1024 * 1024);
+
+    displayImages.add(MemoryImage(imageData!));
+    return displayImages.first;
+  }
+
+  Future<List<MemoryImage>> getAllImagesFromStorage() async {
+    displayImages = [];
+    for (var imageName in imageNames) {
+      final String imagePath = "postingImages/$id/$imageName";
+      final imageData = await FirebaseStorage.instance
+          .ref()
+          .child(imagePath)
+          .getData(1024 * 1024);
+
+      displayImages.add(MemoryImage(imageData!));
+    }
+    return displayImages;
+  }
+
+  Future<void> getHostFromFirestrore() async {
+    await host!.getContactInfoFromFirestore();
+    await host!.getImageFromStorage();
+  }
+
+  Future<void> getAllBookingsFromFirestore() async {
+    bookings = [];
+    await FirebaseFirestore.instance
+        .collection('postings/$id/bookings')
+        .get()
+        .then((QuerySnapshot snapshot) {
+      // ignore: avoid_function_literals_in_foreach_calls
+      snapshot.docs.forEach((DocumentSnapshot document) {
+        Booking newBooking = Booking();
+        newBooking.getBookingInfoFromFirestoreFromPosting(this, document);
+        bookings.add(newBooking);
+      });
+    });
   }
 }

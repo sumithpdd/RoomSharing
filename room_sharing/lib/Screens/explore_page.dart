@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/dummy_data.dart';
 import 'package:room_sharing/Models/posting_model.dart';
@@ -14,11 +16,8 @@ class ExplorePage extends StatefulWidget {
 }
 
 class _ExplorePageState extends State<ExplorePage> {
-  late List<Posting> _posting;
-
   @override
   void initState() {
-    _posting = DummyData.postings;
     super.initState();
   }
 
@@ -48,36 +47,52 @@ class _ExplorePageState extends State<ExplorePage> {
                 style: TextStyle(fontSize: 20.0, color: Colors.black),
               ),
             ),
-            GridView.builder(
-              physics: ScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: _posting.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
-                childAspectRatio: 3 / 4,
-              ),
-              itemBuilder: (context, index) {
-                Posting currentPosting = _posting[index];
-                return InkResponse(
-                  enableFeedback: true,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ViewPostingPage(
-                          posting: currentPosting,
+            StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('postings')
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshots) {
+                  switch (snapshots.connectionState) {
+                    case ConnectionState.waiting:
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    default:
+                      return GridView.builder(
+                        physics: ScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: snapshots.data!.docs.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
+                          childAspectRatio: 3 / 4,
                         ),
-                      ),
-                    );
-                  },
-                  child: PostingGridTile(
-                    posting: currentPosting,
-                  ),
-                );
-              },
-            )
+                        itemBuilder: (context, index) {
+                          DocumentSnapshot snapshot =
+                              snapshots.data!.docs[index];
+                          Posting currentPosting = Posting(id: snapshot.id);
+                          currentPosting.getPostingInfoFromSnapshot(snapshot);
+                          return InkResponse(
+                            enableFeedback: true,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewPostingPage(
+                                    posting: currentPosting,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: PostingGridTile(
+                              posting: currentPosting,
+                            ),
+                          );
+                        },
+                      );
+                  }
+                })
           ],
         ),
       ),

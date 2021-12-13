@@ -3,9 +3,11 @@
 import 'dart:async';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Models/review_model.dart';
 import 'package:room_sharing/Screens/book_posting_page.dart';
@@ -34,13 +36,19 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
   //   'Wifi',
   //   'GYM'
   // ];
-  final LatLng _aptLatLong = LatLng(51.5063836, -0.0745941);
-  late Completer<GoogleMapController> _completer;
+  // final LatLng _aptLatLong = LatLng(51.5063836, -0.0745941);
+  // late Completer<GoogleMapController> _completer;
 
   @override
   void initState() {
     _posting = widget.posting;
-    _completer = Completer();
+    _posting.getAllImagesFromStorage().whenComplete(() {
+      setState(() {});
+    });
+    _posting.getHostFromFirestrore().whenComplete(() {
+      setState(() {});
+    });
+    // _completer = Completer();
     super.initState();
   }
 
@@ -66,7 +74,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                 child: PageView.builder(
                     itemCount: _posting.displayImages.length,
                     itemBuilder: (context, index) {
-                      AssetImage currentImage = _posting.displayImages[index];
+                      MemoryImage currentImage = _posting.displayImages[index];
                       return Image(
                         image: currentImage,
                         fit: BoxFit.fill,
@@ -163,12 +171,13 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ViewProfilePage(
-                                            contact: _posting.host),
+                                            contact: _posting.host!),
                                       ),
                                     );
                                   },
                                   child: CircleAvatar(
-                                    backgroundImage: _posting.host.displayImage,
+                                    backgroundImage:
+                                        _posting.host!.displayImage,
                                     radius:
                                         MediaQuery.of(context).size.width / 13,
                                   ),
@@ -177,7 +186,7 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: Text(
-                                  _posting.host.firstName,
+                                  _posting.host!.firstName,
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               )
@@ -247,24 +256,25 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 25.0),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 3,
-                        child: GoogleMap(
-                          onMapCreated: (controller) {
-                            _completer.complete(controller);
-                          },
-                          mapType: MapType.normal,
-                          initialCameraPosition: CameraPosition(
-                            target: _aptLatLong,
-                            zoom: 14,
+                          height: MediaQuery.of(context).size.height / 3,
+                          child: Text('map')
+                          // GoogleMap(
+                          //   onMapCreated: (controller) {
+                          //     _completer.complete(controller);
+                          //   },
+                          //   mapType: MapType.normal,
+                          //   initialCameraPosition: CameraPosition(
+                          //     target: _aptLatLong,
+                          //     zoom: 14,
+                          //   ),
+                          //   markers: <Marker>{
+                          //     Marker(
+                          //         markerId: MarkerId('Apartment location'),
+                          //         position: _aptLatLong,
+                          //         icon: BitmapDescriptor.defaultMarker)
+                          //   },
+                          // ),
                           ),
-                          markers: <Marker>{
-                            Marker(
-                                markerId: MarkerId('Apartment location'),
-                                position: _aptLatLong,
-                                icon: BitmapDescriptor.defaultMarker)
-                          },
-                        ),
-                      ),
                     ),
                     Text(
                       'Reviews',
@@ -278,22 +288,42 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                       child: ReviewForm(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: ListView.builder(
-                        itemCount: _posting.reviews.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          Review currentReview = _posting.reviews[index];
-                          return Padding(
-                            padding:
-                                const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                            child: ReviewListTile(
-                              review: currentReview,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection('postings/${_posting.id}/reviews')
+                                .snapshots(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshots) {
+                              switch (snapshots.connectionState) {
+                                case ConnectionState.waiting:
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+
+                                default:
+                                  return ListView.builder(
+                                    itemCount: snapshots.data!.docs.length,
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot snapshot =
+                                          snapshots.data!.docs[index];
+
+                                      Review currentReview = Review();
+                                      currentReview
+                                          .getReviewInfoFromFirestore(snapshot);
+
+                                      return Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 10.0, bottom: 10.0),
+                                        child: ReviewListTile(
+                                          review: currentReview,
+                                        ),
+                                      );
+                                    },
+                                  );
+                              }
+                            })),
                   ],
                 ),
               ),

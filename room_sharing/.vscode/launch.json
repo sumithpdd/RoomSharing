@@ -8,14 +8,13 @@
             "name": "room_sharing",
             "request": "launch",
             "type": "dart",
-            "program": "lib/screens/main.dart"
+            "program": "lib/Screens//main.dart"
         },
         {
             "name": "room_sharing (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile",
-            "program": "lib/screens/main.dart"
+            "flutterMode": "profile"
         }
     ]
 }

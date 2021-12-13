@@ -15,7 +15,6 @@ class ReviewListTile extends StatefulWidget {
   final Review review;
   const ReviewListTile({Key? key, required this.review}) : super(key: key);
 
-
   @override
   _ReviewListTileState createState() => _ReviewListTileState();
 }
@@ -25,6 +24,9 @@ class _ReviewListTileState extends State<ReviewListTile> {
   @override
   void initState() {
     _review = widget.review;
+    _review.contact!.getImageFromStorage().whenComplete(() {
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -35,39 +37,44 @@ class _ReviewListTileState extends State<ReviewListTile> {
         Row(
           children: [
             InkResponse(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => ViewProfilePage(
-                      contact:
-                      _review.contact,
+                      contact: _review.contact!,
                     ),
                   ),
                 );
               },
-              child: CircleAvatar(
-                backgroundImage: _review.contact.displayImage,
-                radius: MediaQuery.of(context).size.width / 15,
+              child: Container(
+                child: (_review.contact!.displayImage == null
+                    ? Container(
+                        width: MediaQuery.of(context).size.width / 7.5,
+                      )
+                    : CircleAvatar(
+                        backgroundImage: _review.contact!.displayImage,
+                        radius: MediaQuery.of(context).size.width / 15,
+                      )),
               ),
             ),
-              Padding(
+            Padding(
               padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: AutoSizeText(
-                _review.contact.firstName,
+                _review.contact!.firstName,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
             ),
             StarRating(
                 editable: false,
-                initialRating: _review.rating,
+                initialRating: _review.rating!,
                 ratingSize: RatingSize.medium),
           ],
         ),
-          Padding(
+        Padding(
           padding: EdgeInsets.only(top: 10.0, bottom: 15),
           child: AutoSizeText(
-            _review.text,
+            _review.text!,
             style: TextStyle(fontSize: 18),
           ),
         )
@@ -78,19 +85,21 @@ class _ReviewListTileState extends State<ReviewListTile> {
 
 class ConversationListTile extends StatefulWidget {
   final Conversation conversation;
-    const ConversationListTile({Key? key,required this.conversation}) : super(key: key);
+  const ConversationListTile({Key? key, required this.conversation})
+      : super(key: key);
 
   @override
   _ConversationListTileState createState() => _ConversationListTileState();
 }
 
 class _ConversationListTileState extends State<ConversationListTile> {
-  late Conversation _conversation ;
+  late Conversation _conversation;
   @override
   void initState() {
     _conversation = widget.conversation;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -100,8 +109,7 @@ class _ConversationListTileState extends State<ConversationListTile> {
             context,
             MaterialPageRoute(
               builder: (context) => ViewProfilePage(
-                contact:
-                _conversation.otherContact,
+                contact: _conversation.otherContact,
               ),
             ),
           );
@@ -131,11 +139,11 @@ class _ConversationListTileState extends State<ConversationListTile> {
 class MessageListTile extends StatelessWidget {
   final Message message;
 
-  const MessageListTile({Key? key,required this.message}) : super(key: key);
+  const MessageListTile({Key? key, required this.message}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(message.sender.firstName == AppConstants.currentUser.firstName){
+    if (message.sender.firstName == AppConstants.currentUser.firstName) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(35, 15, 15, 15.0),
         child: Row(
@@ -179,8 +187,7 @@ class MessageListTile extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ViewProfilePage(
-                      contact:
-                      AppConstants.currentUser.createContactFromUser(),
+                      contact: AppConstants.currentUser.createContactFromUser(),
                     ),
                   ),
                 );
@@ -193,71 +200,70 @@ class MessageListTile extends StatelessWidget {
           ],
         ),
       );
-    }
-    else{
-
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(15, 15, 35, 15.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ViewProfilePage(
-                    contact:message.sender,
-                  ),
-                ),
-              );
-            },
-            child: CircleAvatar(
-              backgroundImage:message.sender.displayImage,
-              radius: MediaQuery.of(context).size.width / 20,
-            ),
-          ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Container(
-                padding: EdgeInsets.all(15.0),
-                decoration: BoxDecoration(
-                    color: Colors.yellow,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        message.text,
-                        textWidthBasis: TextWidthBasis.parent,
-                        style: TextStyle(fontSize: 20.0),
-                      ),
+    } else {
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(15, 15, 35, 15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewProfilePage(
+                      contact: message.sender,
                     ),
-                    Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          message.getMessageDateTime(),
-                          style: TextStyle(fontSize: 15.0),
-                        ))
-                  ],
-                ),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                backgroundImage: message.sender.displayImage,
+                radius: MediaQuery.of(context).size.width / 20,
               ),
             ),
-          )
-        ],
-      ),
-    );
-  }}
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: Container(
+                  padding: EdgeInsets.all(15.0),
+                  decoration: BoxDecoration(
+                      color: Colors.yellow,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: Text(
+                          message.text,
+                          textWidthBasis: TextWidthBasis.parent,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment.bottomRight,
+                          child: Text(
+                            message.getMessageDateTime(),
+                            style: TextStyle(fontSize: 15.0),
+                          ))
+                    ],
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+  }
 }
 
 class MyPostingListTile extends StatefulWidget {
   final Posting posting;
-  const MyPostingListTile({Key? key,required this.posting}) : super(key: key);
+  const MyPostingListTile({Key? key, required this.posting}) : super(key: key);
 
   @override
   _MyPostingListTileState createState() => _MyPostingListTileState();
@@ -270,6 +276,7 @@ class _MyPostingListTileState extends State<MyPostingListTile> {
     _posting = widget.posting;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(

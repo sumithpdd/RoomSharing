@@ -18,9 +18,30 @@ class BookPostingPage extends StatefulWidget {
 class _BookPostingPageState extends State<BookPostingPage> {
   late Posting _posting;
 
+  late List<CalendarMonth> _calendarWidgets = [];
+  late List<DateTime> _bookedDates = [];
+
+  void _buildCalendarWidgets() {
+    _calendarWidgets = [];
+    for (int i = 0; i < 12; i++) {
+      _calendarWidgets
+          .add(CalendarMonth(monthIndex: i, bookedDates: _bookedDates));
+    }
+    setState(() {});
+  }
+
+  void _loadBookedDates() {
+    _bookedDates = [];
+    _posting.getAllBookingsFromFirestore().whenComplete(() {
+      _bookedDates = _posting.getAllBookedDates();
+      _buildCalendarWidgets();
+    });
+  }
+
   @override
   void initState() {
     _posting = widget.posting;
+    _loadBookedDates();
     super.initState();
   }
 
@@ -28,7 +49,7 @@ class _BookPostingPageState extends State<BookPostingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: AppBarText(text: 'Book a Posting'),
+          title: AppBarText(text: 'Book ${_posting.name}'),
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(25, 25, 25, 0),
@@ -50,15 +71,14 @@ class _BookPostingPageState extends State<BookPostingPage> {
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 1.8,
-                child: PageView.builder(
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    return CalendarMonth(
-                      monthIndex: index,
-                      bookedDates: _posting.getAllBookedDates(),
-                    );
-                  },
-                ),
+                child: (_calendarWidgets.isEmpty
+                    ? Container()
+                    : PageView.builder(
+                        itemCount: _calendarWidgets.length,
+                        itemBuilder: (context, index) {
+                          return _calendarWidgets[index];
+                        },
+                      )),
               ),
               MaterialButton(
                 onPressed: () {},

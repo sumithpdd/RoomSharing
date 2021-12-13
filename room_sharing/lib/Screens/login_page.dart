@@ -36,14 +36,16 @@ class _LoginPageState extends State<LoginPage> {
               email: _emailController.text, password: _passwordController.text)
           .then((firebaseUser) {
         String userId = firebaseUser.user!.uid;
-        app_user.User user = app_user.User();
-        user.id = userId;
+        AppConstants.currentUser = app_user.User(id: userId);
+        AppConstants.currentUser
+            .getPersonalInfoFromFirestore()
+            .whenComplete(() {
+          Navigator.pushNamed(context, GuestHomePage.routeName);
+        });
 
         //fetch rest of user info
-        DummyData.populateFields();
-        AppConstants.currentUser = DummyData.users[1];
-
-        Navigator.pushNamed(context, GuestHomePage.routeName);
+        // DummyData.populateFields();
+        // AppConstants.currentUser = DummyData.users[1];
       });
     }
   }
