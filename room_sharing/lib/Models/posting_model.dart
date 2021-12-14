@@ -9,7 +9,7 @@ import 'package:room_sharing/Models/review_model.dart';
 import 'contact_model.dart';
 
 class Posting {
-  final String id;
+  String id;
   String name;
   String type;
   double price;
@@ -31,7 +31,7 @@ class Posting {
   late List<Review> reviews;
 
   Posting({
-    required this.id,
+    this.id = "",
     this.name = "",
     this.type = "",
     this.price = 0,
@@ -213,5 +213,65 @@ class Posting {
         bookings.add(newBooking);
       });
     });
+  }
+
+  Future<void> addPostingInfoToFirestore() async {
+    setImageNames();
+    Map<String, dynamic> data = {
+      'address': address,
+      'amenities': amenities,
+      'baths': baths,
+      'beds': beds,
+      'city': city,
+      'country': country,
+      'description': description,
+      'hostID': AppConstants.currentUser.id,
+      'imageNames': imageNames,
+      'name': name,
+      'price': price,
+      'rating': 2.5,
+      'type': type,
+    };
+    DocumentReference reference =
+        await FirebaseFirestore.instance.collection('postings').add(data);
+    id = reference.id;
+    await AppConstants.currentUser.addPostingToMyPosting(this);
+  }
+
+  void setImageNames() {
+    imageNames = [];
+    for (int i = 0; i < displayImages.length; i++) {
+      imageNames.add('pic$i.jpg');
+    }
+  }
+
+  Future<void> addImagesToFirestore() async {
+    for (int i = 0; i < displayImages.length; i++) {
+      Reference reference = FirebaseStorage.instance
+          .ref()
+          .child('postingImages/$id/$imageNames[i]');
+      await reference.putData(displayImages[i].bytes).whenComplete(() {});
+    }
+  }
+
+  Future<void> updatePostingInfoInFirestore() async {
+    setImageNames();
+    Map<String, dynamic> data = {
+      'address': address,
+      'amenities': amenities,
+      'baths': baths,
+      'beds': beds,
+      'city': city,
+      'country': country,
+      'description': description,
+      'hostID': AppConstants.currentUser.id,
+      'imageNames': imageNames,
+      'name': name,
+      'price': price,
+      'rating': rating,
+      'type': type,
+    };
+
+    await FirebaseFirestore.instance.doc('postings/$id').update(data);
   }
 }

@@ -1,6 +1,9 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:room_sharing/Models/booking_model.dart';
 import 'package:room_sharing/Models/conversation_model.dart';
@@ -18,6 +21,7 @@ class User extends Contact {
   late bool isHost;
   late bool isCurrentlyHosting;
   late double rating;
+  late String password;
 
   late List<Booking> bookings;
   late List<Review> reviews;
@@ -71,12 +75,37 @@ class User extends Contact {
     bookings.add(newBooking);
   }
 
-  void addSavedPosting(Posting posting) {
+  Future<void> addSavedPosting(Posting posting) async {
+    if (savedPostings.where((post) => post.id == posting.id).isNotEmpty) {
+      return;
+    }
+
     savedPostings.add(posting);
+
+    List<String> savedPostingsIDs = [];
+
+    savedPostings.forEach((posting) {
+      savedPostingsIDs.add(posting.id);
+    });
+
+    Map<String, dynamic> data = {
+      "savedPostingIDs": savedPostingsIDs,
+    };
+    await FirebaseFirestore.instance.doc('users/$id').update(data);
   }
 
-  void removeSavedPosting(Posting posting) {
-    savedPostings.removeWhere((post) => post.name == posting.name);
+  Future<void> removeSavedPosting(Posting posting) async {
+    savedPostings.removeWhere((post) => post.id == posting.id);
+    List<String> savedPostingsIDs = [];
+
+    savedPostings.forEach((posting) {
+      savedPostingsIDs.add(posting.id);
+    });
+
+    Map<String, dynamic> data = {
+      "savedPostingIDs": savedPostingsIDs,
+    };
+    await FirebaseFirestore.instance.doc('users/$id').update(data);
   }
 
   double getCurrentRating() {
@@ -189,5 +218,54 @@ class User extends Contact {
           createContactFromUser(), doc);
       bookings.add(newBooking);
     });
+  }
+
+  Future<void> addUserToFirestore() async {
+    Map<String, dynamic> data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "email": email,
+      "bio": bio,
+      "city": city,
+      "country": country,
+      "isHost": false,
+      "myPostingIDs": [],
+      "savedPostingIDs": []
+    };
+    await FirebaseFirestore.instance.doc('users/$id').set(data);
+  }
+
+  Future<void> addImageToFirestore(File imageFile) async {
+    Reference reference =
+        FirebaseStorage.instance.ref().child('userImages/$id/profile_pic.jpg');
+    await reference.putFile(imageFile).whenComplete(() {
+      displayImage = MemoryImage(imageFile.readAsBytesSync());
+    });
+  }
+
+  Future<void> updateUserInFirestore() async {
+    Map<String, dynamic> data = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "bio": bio,
+      "city": city,
+      "country": country,
+    };
+    await FirebaseFirestore.instance.doc('users/$id').update(data);
+  }
+
+  Future<void> addPostingToMyPosting(Posting posting) async {
+    myPostings.add(posting);
+
+    List<String> myPostingIDs = [];
+
+    myPostings.forEach((posting) {
+      myPostingIDs.add(posting.id);
+    });
+
+    Map<String, dynamic> data = {
+      "myPostingIDs": myPostingIDs,
+    };
+    await FirebaseFirestore.instance.doc('users/$id').update(data);
   }
 }

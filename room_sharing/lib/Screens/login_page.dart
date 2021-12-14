@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:room_sharing/Models/app_constants.dart';
 import 'package:room_sharing/Models/dummy_data.dart';
-import 'package:room_sharing/Models/user_model.dart';
+import 'package:room_sharing/Models/user_model.dart' as app_user;
 import 'package:room_sharing/Screens/guest_home_page.dart';
 
 import 'signup_page.dart';
@@ -22,11 +22,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void _signup() {
-    Navigator.pushNamed(context, SignupPage.routeName);
+    if (_formKey.currentState!.validate()) {
+      String email = _emailController.text;
+      String password = _passwordController.text;
+      AppConstants.currentUser = app_user.User();
+      AppConstants.currentUser.email = email;
+      AppConstants.currentUser.password = password;
+      Navigator.pushNamed(context, SignupPage.routeName);
+    }
   }
 
   void _login() {

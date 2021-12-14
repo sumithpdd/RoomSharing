@@ -52,7 +52,7 @@ class _SavedPageState extends State<SavedPage> {
                       ),
                     ),
                   );
-                 },
+                },
                 child: PostingGridTile(
                   posting: currentPosting,
                 ),
@@ -67,7 +67,13 @@ class _SavedPageState extends State<SavedPage> {
                         shape: BoxShape.circle, color: Colors.white),
                     child: IconButton(
                         padding: EdgeInsets.all(0.0),
-                        onPressed: () {},
+                        onPressed: () {
+                          AppConstants.currentUser
+                              .removeSavedPosting(currentPosting)
+                              .whenComplete(() {
+                            setState(() {});
+                          });
+                        },
                         icon: Icon(
                           Icons.clear,
                           color: Colors.black,

@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:room_sharing/Models/app_constants.dart';
 
 import 'package:room_sharing/Models/posting_model.dart';
 import 'package:room_sharing/Models/review_model.dart';
@@ -59,7 +60,9 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
           title: AppBarText(text: 'Posting Information'),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  AppConstants.currentUser.addSavedPosting(_posting);
+                },
                 icon: Icon(
                   Icons.save,
                   color: Colors.white,

@@ -10,8 +10,9 @@ import 'package:room_sharing/Views/text_widgets.dart';
 
 class HostHomePage extends StatefulWidget {
   static final String routeName = '/HostHomePageRoute';
+  final int? index;
 
-  const HostHomePage({Key? key}) : super(key: key);
+  const HostHomePage({Key? key, this.index}) : super(key: key);
 
   @override
   _HostHomePageState createState() => _HostHomePageState();
@@ -19,6 +20,12 @@ class HostHomePage extends StatefulWidget {
 
 class _HostHomePageState extends State<HostHomePage> {
   int _selectedIndex = 3;
+  @override
+  void initState() {
+    _selectedIndex = widget.index ?? 3;
+    super.initState();
+  }
+
   final List<String> _pageTitles = [
     'Booking',
     'My Postings',
