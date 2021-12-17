@@ -1,16 +1,39 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:room_sharing/Models/posting_model.dart';
+import 'package:room_sharing/Models/user_model.dart';
 import 'package:room_sharing/Views/rating_widget.dart';
 
 class ReviewForm extends StatefulWidget {
-  const ReviewForm({Key? key}) : super(key: key);
+  final Posting? posting;
+  final User? user;
+  const ReviewForm({Key? key, this.posting, this.user}) : super(key: key);
 
   @override
   _ReviewFormState createState() => _ReviewFormState();
 }
 
 class _ReviewFormState extends State<ReviewForm> {
+  final TextEditingController _controller = TextEditingController();
+  double _rating = 2.5;
+
+  void _submitReview() {
+    if (widget.posting == null) {
+      widget.user!.postNewReview(_controller.text, _rating).whenComplete(() {
+        setState(() {
+          _controller.text = "";
+        });
+      });
+    } else {
+      widget.posting!.postNewReview(_controller.text, _rating).whenComplete(() {
+        setState(() {
+          _controller.text = "";
+        });
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,16 +53,32 @@ class _ReviewFormState extends State<ReviewForm> {
                   style: TextStyle(
                     fontSize: 20,
                   ),
+                  controller: _controller,
+                  validator: (text) {
+                    if (text!.isEmpty) {
+                      return "Please enter some text";
+                    }
+                    return null;
+                  },
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top:10.0, bottom: 10.0),
-                  child: StarRating(editable:true,initialRating: 2.5,ratingSize: RatingSize.large,),
+                  padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                  child: StarRating(
+                    editable: true,
+                    ratingValue: _rating,
+                    ratingSize: RatingSize.large,
+                    onRatingUpdated: (rating) {
+                      setState(() {
+                        _rating = rating;
+                      });
+                    },
+                  ),
                 ),
               ],
             ),
           ),
           MaterialButton(
-            onPressed: () {},
+            onPressed: _submitReview,
             color: Colors.blue,
             child: Text('Submit'),
           ),

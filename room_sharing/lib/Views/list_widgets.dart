@@ -21,12 +21,14 @@ class ReviewListTile extends StatefulWidget {
 
 class _ReviewListTileState extends State<ReviewListTile> {
   late Review _review;
+  double _rating = 2.5;
   @override
   void initState() {
     _review = widget.review;
     _review.contact!.getImageFromStorage().whenComplete(() {
       setState(() {});
     });
+    _rating = _review.rating!;
     super.initState();
   }
 
@@ -67,8 +69,13 @@ class _ReviewListTileState extends State<ReviewListTile> {
             ),
             StarRating(
                 editable: false,
-                initialRating: _review.rating!,
-                ratingSize: RatingSize.medium),
+                ratingValue: _rating,
+                ratingSize: RatingSize.medium,
+                onRatingUpdated: (rating) {
+                  setState(() {
+                    _rating = rating;
+                  });
+                }),
           ],
         ),
         Padding(

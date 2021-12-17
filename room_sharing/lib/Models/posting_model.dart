@@ -104,12 +104,24 @@ class Posting {
     return text;
   }
 
-  void makeNewBooking(List<DateTime> dates) {
+  Future<void> makeNewBooking(List<DateTime> dates) async {
+    Map<String, dynamic> bookingData = {
+      'dates': dates,
+      'name': AppConstants.currentUser.getFullName(),
+      'userID': AppConstants.currentUser.id
+    };
+
+    DocumentReference reference = await FirebaseFirestore.instance
+        .collection('postings/$id/bookings')
+        .add(bookingData);
+
     Booking newBooking = Booking(
+        id: reference.id,
         posting: this,
         contact: AppConstants.currentUser.createContactFromUser(),
         dates: dates);
     bookings.add(newBooking);
+    await AppConstants.currentUser.addNewBookingToFirestore(newBooking);
   }
 
   List<DateTime> getAllBookedDates() {
@@ -133,13 +145,23 @@ class Posting {
     return rating;
   }
 
-  void postNewReview(String text, double rating) {
-    Review newReview = Review(
-        contact: AppConstants.currentUser.createContactFromUser(),
-        text: text,
-        rating: rating,
-        dateTime: DateTime.now());
-    reviews.add(newReview);
+  Future<void> postNewReview(String text, double rating) async {
+    // Review newReview = Review(
+    //     contact: AppConstants.currentUser.createContactFromUser(),
+    //     text: text,
+    //     rating: rating,
+    //     dateTime: DateTime.now());
+    // reviews.add(newReview);
+    Map<String, dynamic> reviewData = {
+      'dateTime': DateTime.now(),
+      'name': AppConstants.currentUser.getFullName(),
+      'rating': rating,
+      'text': text,
+      'userID': AppConstants.currentUser.id
+    };
+    await FirebaseFirestore.instance
+        .collection('postings/$id/reviews')
+        .add(reviewData);
   }
 
   Future<void> getPostingInfoFromFirestore() async {
@@ -172,6 +194,7 @@ class Posting {
       return displayImages.first;
     }
     final String imagePath = "postingImages/$id/${imageNames.first}";
+    print(imagePath);
     final imageData = await FirebaseStorage.instance
         .ref()
         .child(imagePath)

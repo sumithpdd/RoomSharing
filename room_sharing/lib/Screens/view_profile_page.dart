@@ -134,7 +134,9 @@ class _ViewProfilePageState extends State<ViewProfilePage> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),
-                child: ReviewForm(),
+                child: ReviewForm(
+                  user: _user,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0),

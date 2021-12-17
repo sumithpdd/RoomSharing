@@ -6,9 +6,14 @@ import 'package:room_sharing/Models/app_constants.dart';
 class CalendarMonth extends StatefulWidget {
   final int monthIndex;
   final List<DateTime> bookedDates;
-
+  final Function selectDate;
+  final Function getSelectedDates;
   const CalendarMonth(
-      {Key? key, required this.monthIndex, required this.bookedDates})
+      {Key? key,
+      required this.monthIndex,
+      required this.bookedDates,
+      required this.selectDate,
+      required this.getSelectedDates})
       : super(key: key);
 
   @override
@@ -16,6 +21,7 @@ class CalendarMonth extends StatefulWidget {
 }
 
 class _CalendarMonthState extends State<CalendarMonth> {
+  List<DateTime> _selectedDates = [];
   late List<MonthTile> _monthTiles;
   late int _currentMonthInt;
 
@@ -41,6 +47,18 @@ class _CalendarMonthState extends State<CalendarMonth> {
     });
   }
 
+  void _selectDate(DateTime date) {
+    setState(() {
+      if (_selectedDates.contains(date)) {
+        _selectedDates.remove(date);
+      } else {
+        _selectedDates.add(date);
+      }
+      _selectedDates.sort();
+      widget.selectDate(date);
+    });
+  }
+
   @override
   void initState() {
     _currentMonthInt = (DateTime.now().month + widget.monthIndex) % 12;
@@ -51,8 +69,9 @@ class _CalendarMonthState extends State<CalendarMonth> {
     if (_currentMonthInt < DateTime.now().month) {
       _currentYearInt += 1;
     }
-
+    _selectedDates.addAll(widget.getSelectedDates());
     _setupMonthTiles();
+
     super.initState();
   }
 
@@ -72,14 +91,29 @@ class _CalendarMonthState extends State<CalendarMonth> {
                 crossAxisCount: 7, childAspectRatio: 1 / 1),
             itemBuilder: (context, index) {
               MonthTile monthTile = _monthTiles[index];
-              if (widget.bookedDates.contains(monthTile.dateTime)) {
+
+              if (monthTile.dateTime == null) {
                 return MaterialButton(
                   onPressed: null,
-                  child: monthTile,
-                  disabledColor: Colors.redAccent,
+                  child: Text(""),
                 );
               }
-              return MaterialButton(onPressed: () {}, child: monthTile);
+              if (widget.bookedDates.contains(monthTile.dateTime)) {
+                return MaterialButton(
+                  onPressed: () {},
+                  child: monthTile,
+                  color: Colors.yellow,
+                  disabledColor: Colors.yellowAccent,
+                );
+              }
+              return MaterialButton(
+                  onPressed: () {
+                    _selectDate(monthTile.dateTime!);
+                  },
+                  color: (_selectedDates.contains(monthTile.dateTime))
+                      ? Colors.blue
+                      : Colors.white,
+                  child: monthTile);
             })
       ],
     );

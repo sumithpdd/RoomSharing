@@ -57,8 +57,12 @@ class User extends Contact {
     isCurrentlyHosting = isHosting;
   }
 
-  void becomeHost() {
+  Future<void> becomeHost() async {
     isHost = true;
+    Map<String, dynamic> data = {
+      "isHost": isHost,
+    };
+    await FirebaseFirestore.instance.doc('users/$id').update(data);
     changeCurrentlyHosting(true);
   }
 
@@ -71,8 +75,28 @@ class User extends Contact {
     );
   }
 
-  void makeNewBooking(Booking newBooking) {
+  Future<void> addNewBookingToFirestore(Booking newBooking) async {
+    Map<String, dynamic> bookingData = {
+      'dates': newBooking.dates,
+      'postingID': newBooking.posting!.id
+    };
+
+    await FirebaseFirestore.instance
+        .doc('users/$id/bookings/${newBooking.id}')
+        .set(bookingData);
+
     bookings.add(newBooking);
+    await addNewBookingConversationFirestore(newBooking);
+  }
+
+  Future<void> addNewBookingConversationFirestore(Booking newBooking) async {
+    Conversation conversation = Conversation();
+    await conversation.addConversationToFireStore(newBooking.posting!.host!);
+    String messageText =
+        "Hi my name is ${AppConstants.currentUser.firstName} and I have"
+        " just booked ${newBooking.posting!.name} from ${newBooking.dates!.first} to ${newBooking.dates!.last}";
+
+    conversation.addMessageToFireStore(messageText);
   }
 
   Future<void> addSavedPosting(Posting posting) async {
@@ -121,13 +145,17 @@ class User extends Contact {
     return rating;
   }
 
-  void postNewReview(String text, double rating) {
-    Review newReview = Review(
-        contact: AppConstants.currentUser.createContactFromUser(),
-        text: text,
-        rating: rating,
-        dateTime: DateTime.now());
-    reviews.add(newReview);
+  Future<void> postNewReview(String text, double rating) async {
+    Map<String, dynamic> reviewData = {
+      'dateTime': DateTime.now(),
+      'name': AppConstants.currentUser.getFullName(),
+      'rating': rating,
+      'text': text,
+      'userID': AppConstants.currentUser.id
+    };
+    await FirebaseFirestore.instance
+        .collection('users/$id/reviews')
+        .add(reviewData);
   }
 
   List<Booking> getPreviousTrips() {

@@ -6,14 +6,16 @@ enum RatingSize { small, medium, large }
 
 class StarRating extends StatefulWidget {
   final bool editable;
-  final double initialRating;
   final RatingSize ratingSize;
+  final double ratingValue;
+  final Function onRatingUpdated;
 
-  const StarRating({
+  StarRating({
     Key? key,
     required this.editable,
-    required this.initialRating,
     required this.ratingSize,
+    required this.ratingValue,
+    required this.onRatingUpdated,
   }) : super(key: key);
 
   @override
@@ -23,7 +25,6 @@ class StarRating extends StatefulWidget {
 class _StarRatingState extends State<StarRating> {
   @override
   Widget build(BuildContext context) {
-    late double _rating;
     double ratingItemSize = 15;
 
     switch (widget.ratingSize) {
@@ -39,7 +40,7 @@ class _StarRatingState extends State<StarRating> {
     }
 
     return RatingBar(
-      initialRating: widget.initialRating,
+      initialRating: widget.ratingValue,
       allowHalfRating: true,
       itemCount: 5,
       itemSize: ratingItemSize,
@@ -48,9 +49,7 @@ class _StarRatingState extends State<StarRating> {
       unratedColor: AppConstants.nonSelectedGreyIconColor,
       itemPadding: const EdgeInsets.symmetric(horizontal: 2.0),
       onRatingUpdate: (rating) {
-        setState(() {
-          _rating = rating;
-        });
+        widget.onRatingUpdated(rating);
       },
       ratingWidget: RatingWidget(
         full: const Icon(

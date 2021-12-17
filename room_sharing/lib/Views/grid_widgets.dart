@@ -17,13 +17,14 @@ class PostingGridTile extends StatefulWidget {
 
 class _PostingGridTileState extends State<PostingGridTile> {
   late Posting _posting;
-
+  double _rating = 2.5;
   @override
   void initState() {
     _posting = widget.posting;
     _posting.getFirstImageFromStorage().whenComplete(() {
       setState(() {});
     });
+    _rating = _posting.getCurrentRating();
     super.initState();
   }
 
@@ -66,10 +67,14 @@ class _PostingGridTileState extends State<PostingGridTile> {
           ),
         ),
         StarRating(
-          editable: false,
-          initialRating: _posting.getCurrentRating(),
-          ratingSize: RatingSize.small,
-        ),
+            editable: false,
+            ratingValue: _rating,
+            ratingSize: RatingSize.small,
+            onRatingUpdated: (rating) {
+              setState(() {
+                _rating = rating;
+              });
+            }),
       ],
     );
   }

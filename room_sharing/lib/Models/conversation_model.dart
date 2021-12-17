@@ -62,4 +62,42 @@ class Conversation {
       }
     });
   }
+
+  Future<void> addConversationToFireStore(Contact otherContact) async {
+    var currentDateTime = DateTime.now();
+    List<String> userNames = [
+      AppConstants.currentUser.getFullName(),
+      otherContact.getFullName()
+    ];
+    List<String> userIDs = [AppConstants.currentUser.id, otherContact.id];
+    Map<String, dynamic> convoData = {
+      'lastMessageDateTime': currentDateTime,
+      'lastMessageText': "",
+      'userNames': userNames,
+      'userIDs': userIDs
+    };
+    DocumentReference reference = await FirebaseFirestore.instance
+        .collection('conversations')
+        .add(convoData);
+    id = reference.id;
+  }
+
+  Future<void> addMessageToFireStore(String messageText) async {
+    var currentDateTime = DateTime.now();
+    Map<String, dynamic> messageData = {
+      'dateTime': currentDateTime,
+      'senderID': AppConstants.currentUser.id,
+      'text ': messageText
+    };
+
+    await FirebaseFirestore.instance
+        .collection('conversations/$id/messages')
+        .add(messageData);
+    Map<String, dynamic> convoData = {
+      'lastMessageDateTime': currentDateTime,
+      'lastMessageText': messageText
+    };
+
+    await FirebaseFirestore.instance.doc('conversations/$id').update(convoData);
+  }
 }

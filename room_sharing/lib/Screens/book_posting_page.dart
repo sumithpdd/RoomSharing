@@ -21,20 +21,50 @@ class _BookPostingPageState extends State<BookPostingPage> {
   late List<CalendarMonth> _calendarWidgets = [];
   late List<DateTime> _bookedDates = [];
 
+  final List<DateTime> _selectedDates = [];
+
   void _buildCalendarWidgets() {
     _calendarWidgets = [];
     for (int i = 0; i < 12; i++) {
-      _calendarWidgets
-          .add(CalendarMonth(monthIndex: i, bookedDates: _bookedDates));
+      _calendarWidgets.add(CalendarMonth(
+        monthIndex: i,
+        bookedDates: _bookedDates,
+        selectDate: _selectDate,
+        getSelectedDates: _getSelectedDates,
+      ));
     }
     setState(() {});
   }
 
   void _loadBookedDates() {
     _bookedDates = [];
+
     _posting.getAllBookingsFromFirestore().whenComplete(() {
       _bookedDates = _posting.getAllBookedDates();
       _buildCalendarWidgets();
+    });
+  }
+
+  List<DateTime> _getSelectedDates() {
+    return _selectedDates;
+  }
+
+  void _selectDate(DateTime dateTime) {
+    setState(() {
+      if (_selectedDates.contains(dateTime)) {
+        _selectedDates.remove(dateTime);
+      } else {
+        _selectedDates.add(dateTime);
+      }
+      _selectedDates.sort();
+    });
+  }
+
+  void _makeBooking() {
+    if (_selectedDates.isEmpty) return;
+
+    _posting.makeNewBooking(_selectedDates).whenComplete(() {
+      Navigator.pop(context);
     });
   }
 
@@ -81,7 +111,7 @@ class _BookPostingPageState extends State<BookPostingPage> {
                       )),
               ),
               MaterialButton(
-                onPressed: () {},
+                onPressed: _makeBooking,
                 child: Text('Book Now!'),
                 minWidth: double.infinity,
                 height: MediaQuery.of(context).size.height / 14,

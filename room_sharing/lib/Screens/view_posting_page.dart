@@ -288,7 +288,9 @@ class _ViewPostingPageState extends State<ViewPostingPage> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20.0),
-                      child: ReviewForm(),
+                      child: ReviewForm(
+                        posting: _posting,
+                      ),
                     ),
                     Padding(
                         padding: const EdgeInsets.only(top: 20.0),

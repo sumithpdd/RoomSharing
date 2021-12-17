@@ -25,21 +25,33 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   void initState() {
-    if (AppConstants.currentUser.isCurrentlyHosting) {
-      _hostingTile = "Guest Dashboard";
+    if (AppConstants.currentUser.isHost) {
+      if (AppConstants.currentUser.isCurrentlyHosting) {
+        _hostingTile = "Guest Dashboard";
+      } else {
+        _hostingTile = "Host Dashboard";
+      }
     } else {
-      _hostingTile = "Host Dashboard";
+      _hostingTile = "Become a host";
     }
+
     super.initState();
   }
 
   void _changeHosting() {
-    if (AppConstants.currentUser.isCurrentlyHosting) {
-      AppConstants.currentUser.isCurrentlyHosting = false;
-      Navigator.pushNamed(context, GuestHomePage.routeName);
+    if (AppConstants.currentUser.isHost) {
+      if (AppConstants.currentUser.isCurrentlyHosting) {
+        AppConstants.currentUser.isCurrentlyHosting = false;
+        Navigator.pushNamed(context, GuestHomePage.routeName);
+      } else {
+        AppConstants.currentUser.isCurrentlyHosting = true;
+        Navigator.pushNamed(context, HostHomePage.routeName);
+      }
     } else {
-      AppConstants.currentUser.isCurrentlyHosting = true;
-      Navigator.pushNamed(context, HostHomePage.routeName);
+      AppConstants.currentUser.becomeHost().whenComplete(() {
+        AppConstants.currentUser.isCurrentlyHosting = true;
+        Navigator.pushNamed(context, HostHomePage.routeName);
+      });
     }
   }
 

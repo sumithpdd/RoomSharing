@@ -20,6 +20,16 @@ class ConversationPage extends StatefulWidget {
 
 class _ConversationPageState extends State<ConversationPage> {
   late Conversation _conversation;
+  final TextEditingController _controller = TextEditingController();
+  void _sendMessage() {
+    String text = _controller.text;
+    if (text.isEmpty) return;
+    _conversation.addMessageToFireStore(text).whenComplete(() {
+      setState(() {
+        _controller.text = "";
+      });
+    });
+  }
 
   @override
   void initState() {
@@ -61,11 +71,12 @@ class _ConversationPageState extends State<ConversationPage> {
                       minLines: 1,
                       maxLines: 5,
                       style: TextStyle(fontSize: 20),
+                      controller: _controller,
                     ),
                   ),
                   Expanded(
                     child: MaterialButton(
-                      onPressed: () {},
+                      onPressed: _sendMessage,
                       child: Text('Send'),
                     ),
                   )

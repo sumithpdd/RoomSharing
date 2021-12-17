@@ -14,12 +14,39 @@ class BookingsPage extends StatefulWidget {
 }
 
 class _BookingsPageState extends State<BookingsPage> {
-  List<DateTime> _bookedDates =[];
+  List<DateTime> _bookedDates = [];
+
+  late List<DateTime> _allBookedDates = [];
+
+  late final List<DateTime> _selectedDates = [];
+  void _selectDate(DateTime dateTime) {}
+  Posting? _selectedPosting;
+
+  List<DateTime> _getSelectedDates() {
+    return _selectedDates;
+  }
+
+  void _selectAPosting(Posting posting) {
+    setState(() {
+      _selectedPosting = posting;
+      _bookedDates = posting.getAllBookedDates();
+    });
+  }
+
+  void _clearSelectedPosting() {
+    setState(() {
+      _bookedDates = _allBookedDates;
+      _selectedPosting = null;
+    });
+  }
+
   @override
   void initState() {
-    _bookedDates=AppConstants.currentUser.getAllBookedDates();
+    _bookedDates = AppConstants.currentUser.getAllBookedDates();
+    _allBookedDates = AppConstants.currentUser.getAllBookedDates();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -51,6 +78,8 @@ class _BookingsPageState extends State<BookingsPage> {
                   return CalendarMonth(
                     monthIndex: index,
                     bookedDates: _bookedDates,
+                    selectDate: _selectDate,
+                    getSelectedDates: _getSelectedDates,
                   );
                 },
               ),
@@ -65,7 +94,7 @@ class _BookingsPageState extends State<BookingsPage> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                   MaterialButton(
-                    onPressed: () {},
+                    onPressed: _clearSelectedPosting,
                     child: Text(
                       'Reset',
                       style:
@@ -86,11 +115,20 @@ class _BookingsPageState extends State<BookingsPage> {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 25),
                       child: InkResponse(
-                        onTap: () {},
+                        onTap: () {
+                          _selectAPosting(
+                              AppConstants.currentUser.myPostings[index]);
+                        },
                         child: Container(
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey, width: 1.0),
+                                border: Border.all(
+                                  color: _selectedPosting ==
+                                          AppConstants
+                                              .currentUser.myPostings[index]
+                                      ? Colors.yellow
+                                      : Colors.grey,
+                                  width: 1.0,
+                                ),
                                 borderRadius: BorderRadius.circular(5)),
                             child: MyPostingListTile(
                               posting: currentPosting,
